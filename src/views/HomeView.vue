@@ -1,8 +1,8 @@
 <template>
-  <div class="home">
+  <v-container class="text-center" fluid>
     <img alt="website logotype" src="../assets/logo.png" />
-    <MainContent msg="Some message" />
-  </div>
+    <MainContent msg="The Mission" />
+  </v-container>
 </template>
 
 <script lang="ts">
