@@ -14,8 +14,6 @@ import HeaderBar from "@/components/HeaderBar.vue";
 export default Vue.extend({
   name: "App",
   components: { HeaderBar },
-  data: () => ({
-    //
-  }),
+  data: () => ({}),
 });
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <v-card color="grey lighten-4" flat tile>
+  <v-card color="grey darken-3" flat tile>
     <v-toolbar dense>
       <v-img
         class="mx-2"
@@ -7,15 +7,18 @@
         max-height="40"
         max-width="40"
         contain
+        @click="redirectToRoute('/')"
       ></v-img>
       <v-toolbar-title>The Mission</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
       <v-toolbar-items>
-        <v-btn text><router-link to="/">Home</router-link></v-btn>
-        <v-btn text><router-link to="/about">About</router-link></v-btn>
-        <v-btn text> Content </v-btn>
+        <v-btn text @click="redirectToRoute('/')">Home</v-btn>
+        <v-btn text @click="redirectToRoute('/about')">About</v-btn>
+        <v-btn icon @click="signOut()">
+          <v-icon>mdi-logout-variant</v-icon>
+        </v-btn>
       </v-toolbar-items>
     </v-toolbar>
   </v-card>
@@ -24,6 +27,14 @@
 <script>
 export default {
   name: "HeaderBar",
+  methods: {
+    redirectToRoute(route) {
+      this.$router.push(route);
+    },
+    signOut() {
+      console.log("sign out");
+    },
+  },
 };
 </script>
 
