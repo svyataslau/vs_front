@@ -1,10 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <nav>
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link>
-      </nav>
+      <HeaderBar />
       <router-view />
     </v-main>
   </v-app>
@@ -12,12 +9,11 @@
 
 <script lang="ts">
 import Vue from "vue";
+import HeaderBar from "@/components/HeaderBar.vue";
 
 export default Vue.extend({
   name: "App",
-
-  data: () => ({
-    //
-  }),
+  components: { HeaderBar },
+  data: () => ({}),
 });
 </script>
