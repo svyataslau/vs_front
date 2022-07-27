@@ -26,13 +26,13 @@
 
 <script>
 export default {
-  name: "HeaderBar",
+  name: 'HeaderBar',
   methods: {
     redirectToRoute(route) {
       this.$router.push(route);
     },
     signOut() {
-      console.log("sign out");
+      console.log('sign out');
     },
   },
 };
