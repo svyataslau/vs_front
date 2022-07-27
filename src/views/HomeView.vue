@@ -1,7 +1,7 @@
 <template>
   <v-container class="text-center" fluid>
     <img alt="website logotype" src="../assets/logo.png" />
-    <MainContent msg="The Mission" />
+    <MainContent msg="The Challenge" />
   </v-container>
 </template>
 

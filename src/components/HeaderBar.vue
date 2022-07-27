@@ -9,7 +9,7 @@
         contain
         @click="redirectToRoute('/')"
       ></v-img>
-      <v-toolbar-title>The Mission</v-toolbar-title>
+      <v-toolbar-title>The Challenge</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
