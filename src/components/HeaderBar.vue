@@ -9,7 +9,7 @@
         contain
         @click="redirectToRoute('/')"
       ></v-img>
-      <v-toolbar-title>The Mission</v-toolbar-title>
+      <v-toolbar-title>The Challenge</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -26,13 +26,13 @@
 
 <script>
 export default {
-  name: "HeaderBar",
+  name: 'HeaderBar',
   methods: {
     redirectToRoute(route) {
       this.$router.push(route);
     },
     signOut() {
-      console.log("sign out");
+      console.log('sign out');
     },
   },
 };
