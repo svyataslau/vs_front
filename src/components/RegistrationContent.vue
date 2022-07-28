@@ -1,42 +1,35 @@
 <template>
-  <v-form ref="form" v-model="valid" lazy-validation>
+  <v-form ref="form" v-model="valid">
     <v-text-field
-      v-model="name"
-      :counter="10"
-      :rules="nameRules"
-      label="Name"
+      v-model="credentials.nickname"
+      :rules="nicknameRules"
+      label="Nickname"
       required
     ></v-text-field>
 
     <v-text-field
-      v-model="email"
+      v-model="credentials.email"
       :rules="emailRules"
       label="E-mail"
       required
     ></v-text-field>
 
-    <v-select
-      v-model="select"
-      :items="items"
-      :rules="[(v) => !!v || 'Item is required']"
-      label="Item"
-      required
-    ></v-select>
-
-    <v-checkbox
-      v-model="checkbox"
-      :rules="[(v) => !!v || 'You must agree to continue!']"
-      label="Do you agree?"
-      required
-    ></v-checkbox>
-
-    <v-btn :disabled="!valid" color="success" class="mr-4" @click="validate">
-      Validate
+    <v-btn
+      :disabled="!valid"
+      color="blue lighten-1"
+      class="mr-4"
+      @click="submit"
+    >
+      Submit
     </v-btn>
 
-    <v-btn color="error" class="mr-4" @click="reset"> Reset Form</v-btn>
+    <v-btn color="pink lighten-1" class="mr-4" @click="$refs.form.reset()">
+      Reset Form
+    </v-btn>
 
-    <v-btn color="warning" @click="resetValidation"> Reset Validation</v-btn>
+    <v-btn color="pink lighten-1" @click="$refs.form.resetValidation()">
+      Reset Validation
+    </v-btn>
   </v-form>
 </template>
 
@@ -47,31 +40,24 @@ export default Vue.extend({
   name: 'RegistrationContent',
   data: () => ({
     valid: true,
-    name: '',
-    nameRules: [
-      (v: string) => !!v || 'Name is required',
+    credentials: {
+      nickname: '',
+      email: '',
+    },
+    nicknameRules: [
+      (v: string) => !!v || 'Nickname is required',
       (v: string) =>
-        (v && v.length <= 10) || 'Name must be less than 10 characters',
+        (v && v.length <= 10) || 'Nickname must be less than 10 characters',
     ],
-    email: '',
     emailRules: [
       (v: string) => !!v || 'E-mail is required',
       (v: string) => /.+@.+\..+/.test(v) || 'E-mail must be valid',
     ],
-    select: null,
-    items: ['Item 1', 'Item 2', 'Item 3', 'Item 4'],
-    checkbox: false,
   }),
 
   methods: {
-    validate() {
-      console.log('validatwe');
-    },
-    reset() {
-      console.log('validatwe');
-    },
-    resetValidation() {
-      console.log('validatwe');
+    submit() {
+      console.log(JSON.stringify(this.credentials));
     },
   },
 });

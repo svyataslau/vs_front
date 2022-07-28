@@ -16,6 +16,9 @@
       <v-toolbar-items>
         <v-btn text @click="redirectToRoute('/')">Home</v-btn>
         <v-btn text @click="redirectToRoute('/about')">About</v-btn>
+        <v-btn text @click="redirectToRoute('/registration')"
+          >Registration</v-btn
+        >
         <v-btn icon @click="signOut()">
           <v-icon>mdi-logout-variant</v-icon>
         </v-btn>

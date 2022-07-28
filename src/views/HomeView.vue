@@ -1,21 +1,10 @@
 <template>
   <v-container class="text-center" fluid>
     <img alt="website logotype" src="../assets/logo.png" />
-    <MainContent msg="The Challenge" />
   </v-container>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import MainContent from '@/components/RegistrationContent.vue';
-
-@Component({
-  components: {
-    MainContent,
-  },
-})
-export default class HomeView extends Vue {}
-</script>
+<script lang="ts"></script>
 
 <style scoped lang="scss">
 img {
