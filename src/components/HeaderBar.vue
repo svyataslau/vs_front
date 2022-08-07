@@ -7,19 +7,17 @@
         max-height="40"
         max-width="40"
         contain
-        @click="redirectToRoute('/')"
       ></v-img>
       <v-toolbar-title>The Challenge</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
       <v-toolbar-items>
-        <v-btn text @click="redirectToRoute('/')">Home</v-btn>
-        <v-btn text @click="redirectToRoute('/about')">About</v-btn>
-        <v-btn text @click="redirectToRoute('/registration')"
-          >Registration</v-btn
-        >
-        <v-btn icon @click="signOut()">
+        <v-btn text @click="redirectToRoute('registration')"
+          >Registration
+        </v-btn>
+        <v-btn text @click="redirectToRoute('login')">Login</v-btn>
+        <v-btn icon @click="signOut">
           <v-icon>mdi-logout-variant</v-icon>
         </v-btn>
       </v-toolbar-items>
@@ -28,6 +26,8 @@
 </template>
 
 <script>
+import { ProfileActions } from '@/store/modules/profile/actions';
+
 export default {
   name: 'HeaderBar',
   methods: {
@@ -35,7 +35,9 @@ export default {
       this.$router.push(route);
     },
     signOut() {
-      console.log('sign out');
+      this.$store
+        .dispatch(ProfileActions.LOGOUT)
+        .then(() => this.$router.push('/login'));
     },
   },
 };

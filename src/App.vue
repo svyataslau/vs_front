@@ -1,7 +1,6 @@
 <template>
   <v-app>
-    <v-main>
-      <HeaderBar />
+    <v-main class="grey lighten-5">
       <router-view />
     </v-main>
   </v-app>
@@ -9,11 +8,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import HeaderBar from '@/components/HeaderBar.vue';
 
 export default Vue.extend({
   name: 'App',
-  components: { HeaderBar },
   data: () => ({}),
 });
 </script>
