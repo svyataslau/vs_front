@@ -32,7 +32,7 @@ export const actions: ActionTree<ProfileState, RootState> = {
         });
     });
   },
-  [ProfileActions.LOGOUT]({ commit }, payload): any {
+  [ProfileActions.LOGOUT]({ commit }) {
     commit(ProfileMutations.SET_IS_AUTHORIZED, false);
     localStorage.removeItem('userData');
   },
