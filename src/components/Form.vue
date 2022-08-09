@@ -2,39 +2,33 @@
   <v-container fluid>
     <h1 class="text-h4">{{ this.title }}</h1>
     <v-form ref="form" v-model="valid">
-      <v-alert color="error" :value="userExists" icon="warning">
-        This user exists, try a different
-      </v-alert>
-
       <v-text-field
         v-if="isRegistrationPage"
         color="black"
         v-model="credentials.nickname"
-        :rules="nicknameRules"
+        :rules="validationRules.nicknameRules"
         label="Nickname"
         required
+        @input="$emit('hideWarnings')"
       ></v-text-field>
 
       <v-text-field
         color="black"
         v-model="credentials.email"
-        :rules="emailRules"
+        :rules="validationRules.emailRules"
         label="Email"
         required
+        @input="$emit('hideWarnings')"
       ></v-text-field>
 
       <v-text-field
         color="black"
         v-model="credentials.password"
-        :rules="passwordRules"
+        :rules="validationRules.passwordRules"
         label="Password"
         required
+        @input="$emit('hideWarnings')"
       ></v-text-field>
-
-      <div>
-        <h4>letsgo763@gmail.com</h4>
-        <h4>somePass32</h4>
-      </div>
 
       <v-btn
         :disabled="!valid"
@@ -59,42 +53,25 @@
 <script lang="ts">
 import Vue from 'vue';
 import { ProfileActions } from '@/store/modules/profile/actions';
+import validationRules from '@/helpers/validationRules';
 
 export default Vue.extend({
-  name: 'RegistrationContent',
+  name: 'FormContent',
   props: {
     title: String,
   },
   data: () => ({
-    userExists: false,
     valid: true,
     credentials: {
       nickname: '',
-      email: '',
-      password: '',
+      email: 'letsgo763@gmail.com', //mocked
+      password: 'somePass32', //mocked
     },
-    nicknameRules: [
-      (v: string) => !!v || 'Password is required',
-      (v: string) =>
-        /^[a-z0-9](?:[-_.]?[a-z0-9])*$/.test(v) ||
-        'Nickname can contain lowercase letters, numbers, -_.',
-    ],
-    emailRules: [
-      (v: string) => !!v || 'Email is required',
-      (v: string) =>
-        /^([a-zA-Z0-9_\-.]+)@([a-zA-Z0-9_\-.]+)\.([a-zA-Z]{2,5})$/.test(v) ||
-        'Invalid email. The email must be valid! Example: some_email-1990@work.old.com',
-    ],
-    passwordRules: [
-      (v: string) => !!v || 'Password is required',
-      (v: string) =>
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(v) ||
-        'Invalid password. The password must consist of uppercase and lowercase Latin letters and be at least 8 characters long!',
-    ],
+    validationRules,
   }),
   computed: {
     isRegistrationPage(): boolean {
-      return this.$route.name === 'registration' ? true : false;
+      return !!(this.$route.name === 'registration');
     },
   },
   methods: {
@@ -105,15 +82,10 @@ export default Vue.extend({
             email: this.credentials.email,
             password: this.credentials.password,
           })
-          .then(() => this.$router.push('/'));
-      } else if (this.$route.name === 'registration') {
-        this.$store
-          .dispatch('REGISTER', {
-            nickname: this.credentials.nickname,
-            email: this.credentials.email,
-            password: this.credentials.password,
-          })
-          .then(() => this.$router.push('/'));
+          .then(() => this.$router.push('/'))
+          .catch((e) => {
+            this.$emit('showWarning', e.response.status);
+          });
       }
     },
   },
