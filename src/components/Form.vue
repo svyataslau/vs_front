@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <h1 class="text-h4">{{ this.title }}</h1>
+    <h1 class="text-h4">{{ title }}</h1>
     <v-form ref="form" v-model="valid">
       <v-text-field
         v-if="isRegistrationPage"
@@ -52,7 +52,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { ProfileActions } from '@/store/modules/profile/actions';
+import { ProfileActions } from '@/store/modules/profile';
 import validationRules from '@/helpers/validationRules';
 
 export default Vue.extend({
@@ -84,7 +84,19 @@ export default Vue.extend({
           })
           .then(() => this.$router.push('/'))
           .catch((e) => {
-            this.$emit('showWarning', e.response.status);
+            this.$emit('showWarning', e.response.data.message);
+          });
+      }
+      if (this.$route.name === 'registration') {
+        this.$store
+          .dispatch(ProfileActions.REGISTER, {
+            nickname: this.credentials.nickname,
+            email: this.credentials.email,
+            password: this.credentials.password,
+          })
+          .then(() => this.$router.push('/'))
+          .catch((e) => {
+            this.$emit('showWarning', e.response.data.message);
           });
       }
     },

@@ -13,10 +13,6 @@
       <v-spacer></v-spacer>
 
       <v-toolbar-items>
-        <v-btn text @click="redirectToRoute('registration')"
-          >Registration
-        </v-btn>
-        <v-btn text @click="redirectToRoute('login')">Login</v-btn>
         <v-btn icon @click="signOut">
           <v-icon>mdi-logout-variant</v-icon>
         </v-btn>
@@ -26,18 +22,15 @@
 </template>
 
 <script>
-import { ProfileActions } from '@/store/modules/profile/actions';
+import { ProfileActions } from '@/store/modules/profile';
 
 export default {
   name: 'HeaderBar',
   methods: {
-    redirectToRoute(route) {
-      this.$router.push(route);
-    },
     signOut() {
       this.$store
         .dispatch(ProfileActions.LOGOUT)
-        .then(() => this.$router.push('/login'));
+        .then(() => this.$router.push('login'));
     },
   },
 };

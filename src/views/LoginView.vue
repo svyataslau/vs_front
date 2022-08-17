@@ -3,22 +3,22 @@
     <v-container class="d-flex flex-column align-center" fluid>
       <img alt="website logotype" src="../assets/logo.png" />
       <Form
-        class="col-12 col-sm-10 col-md-6"
-        :title="this.title"
+        :title="titles.headingName"
         @showWarning="showWarning"
         @hideWarnings="hideWarnings"
+        class="col-12 col-sm-10 col-md-6"
       />
       <v-btn text @click="redirectToRoute"
-        >{{ this.redirectButtonName }}
+        >{{ titles.redirectButtonName }}
       </v-btn>
       <v-overlay
         :absolute="true"
         :opacity="0.9"
-        color="grey lighten-5"
         :value="isAlertVisible"
         @click="isAlertVisible = false"
+        color="grey lighten-5"
       >
-        <CustomAlert :value="isAlertVisible" :message="this.alertMessage" />
+        <CustomAlert :value="isAlertVisible" :message="alertMessage" />
       </v-overlay>
     </v-container>
   </v-main>
@@ -44,25 +44,12 @@ export default Vue.extend({
     };
   },
   computed: {
-    title() {
-      switch (this.$route.name) {
-        case 'login':
-          return 'Login';
-        case 'registration':
-          return 'Registration';
-        default:
-          return '';
-      }
-    },
-    redirectButtonName() {
-      switch (this.$route.name) {
-        case 'login':
-          return 'Registration page';
-        case 'registration':
-          return 'Login page';
-        default:
-          return '';
-      }
+    titles() {
+      return {
+        headingName: this.$route.name == 'login' ? 'Login' : 'Registration',
+        redirectButtonName:
+          this.$route.name == 'login' ? 'Registration page' : 'Login page',
+      };
     },
   },
   methods: {
@@ -73,12 +60,10 @@ export default Vue.extend({
         this.$router.push('/registration');
       }
     },
-    showWarning(responseErrorCode: number) {
-      if (responseErrorCode === 401) {
-        this.alertMessage = 'This user is not registered';
-        this.isAlertVisible = true;
-        setTimeout(this.hideWarnings, 2000);
-      }
+    showWarning(responseErrorMessage: string) {
+      this.alertMessage = responseErrorMessage;
+      this.isAlertVisible = true;
+      setTimeout(this.hideWarnings, 2000);
     },
     hideWarnings() {
       if (this.isAlertVisible) this.isAlertVisible = false;

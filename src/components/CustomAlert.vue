@@ -1,6 +1,6 @@
 <template>
-  <v-alert outlined shaped :type="this.type" :value="this.value">
-    {{ this.message }}
+  <v-alert outlined shaped :type="type" :value="value">
+    {{ message }}
   </v-alert>
 </template>
 

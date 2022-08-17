@@ -1,6 +1,6 @@
 export default {
   nicknameRules: [
-    (v: string) => !!v || 'Password is required',
+    (v: string) => !!v || 'Nickname is required',
     (v: string) =>
       /^[a-z0-9](?:[-_.]?[a-z0-9])*$/.test(v) ||
       'Nickname can contain lowercase letters, numbers, -_.',
