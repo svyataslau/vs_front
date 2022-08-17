@@ -1,11 +1,10 @@
 import axios from 'axios';
+import { vm } from '@/main';
 import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
 import { RootState } from '@/store/index';
 
-const apiUrl = process.env.VUE_APP_API_DEFAULT_URL;
-
-const authAxios = axios.create({
-  baseURL: apiUrl,
+const apiUrl = axios.create({
+  baseURL: process.env.VUE_APP_API_DEFAULT_URL,
 });
 
 export interface ProfileState {
@@ -39,27 +38,37 @@ export enum ProfileActions {
 }
 
 export const actions: ActionTree<ProfileState, RootState> = {
-  async [ProfileActions.REGISTER]({ commit }, payload) {
-    try {
-      const { data, status } = await authAxios.post('/users', payload);
-      if (status === 201) {
-        commit(ProfileMutations.SET_IS_AUTHORIZED, true);
-        localStorage.setItem('userData', JSON.stringify(data.data));
-      }
-    } catch (e) {
-      console.log(e);
-    }
+  [ProfileActions.REGISTER]({ commit, dispatch }, payload) {
+    apiUrl
+      .post('/users', payload)
+      .then((res) => {
+        if (res.status === 201) {
+          commit(ProfileMutations.SET_IS_AUTHORIZED, true);
+          localStorage.setItem('userData', JSON.stringify(res.data.data));
+          vm.$router.push('/');
+        }
+      })
+      .catch((e) => {
+        dispatch('SHOW_ALERT', e.response.data.message, {
+          root: true,
+        });
+      });
   },
-  async [ProfileActions.LOGIN]({ commit }, payload) {
-    try {
-      const { data, status } = await authAxios.post('/users/login', payload);
-      if (status === 200) {
-        commit(ProfileMutations.SET_IS_AUTHORIZED, true);
-        localStorage.setItem('userData', JSON.stringify(data.data));
-      }
-    } catch (e) {
-      console.log(e);
-    }
+  [ProfileActions.LOGIN]({ commit, dispatch }, payload) {
+    apiUrl
+      .post('/users/login', payload)
+      .then((res) => {
+        if (res.status === 200) {
+          commit(ProfileMutations.SET_IS_AUTHORIZED, true);
+          localStorage.setItem('userData', JSON.stringify(res.data.data));
+          vm.$router.push('/');
+        }
+      })
+      .catch((e) => {
+        dispatch('SHOW_ALERT', e.response.data.message, {
+          root: true,
+        });
+      });
   },
   [ProfileActions.LOGOUT]({ commit }) {
     try {

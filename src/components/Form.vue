@@ -9,7 +9,6 @@
         :rules="validationRules.nicknameRules"
         label="Nickname"
         required
-        @input="$emit('hideWarnings')"
       ></v-text-field>
 
       <v-text-field
@@ -18,7 +17,6 @@
         :rules="validationRules.emailRules"
         label="Email"
         required
-        @input="$emit('hideWarnings')"
       ></v-text-field>
 
       <v-text-field
@@ -27,7 +25,6 @@
         :rules="validationRules.passwordRules"
         label="Password"
         required
-        @input="$emit('hideWarnings')"
       ></v-text-field>
 
       <v-btn
@@ -77,27 +74,17 @@ export default Vue.extend({
   methods: {
     submit() {
       if (this.$route.name === 'login') {
-        this.$store
-          .dispatch(ProfileActions.LOGIN, {
-            email: this.credentials.email,
-            password: this.credentials.password,
-          })
-          .then(() => this.$router.push('/'))
-          .catch((e) => {
-            this.$emit('showWarning', e.response.data.message);
-          });
+        this.$store.dispatch(ProfileActions.LOGIN, {
+          email: this.credentials.email,
+          password: this.credentials.password,
+        });
       }
       if (this.$route.name === 'registration') {
-        this.$store
-          .dispatch(ProfileActions.REGISTER, {
-            nickname: this.credentials.nickname,
-            email: this.credentials.email,
-            password: this.credentials.password,
-          })
-          .then(() => this.$router.push('/'))
-          .catch((e) => {
-            this.$emit('showWarning', e.response.data.message);
-          });
+        this.$store.dispatch(ProfileActions.REGISTER, {
+          nickname: this.credentials.nickname,
+          email: this.credentials.email,
+          password: this.credentials.password,
+        });
       }
     },
   },

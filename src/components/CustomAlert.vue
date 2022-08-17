@@ -1,7 +1,14 @@
 <template>
-  <v-alert outlined shaped :type="type" :value="value">
-    {{ message }}
-  </v-alert>
+  <v-overlay
+    :absolute="true"
+    :opacity="0.9"
+    :value="value"
+    color="grey lighten-5"
+  >
+    <v-alert outlined shaped :type="type" :value="value">
+      {{ message }}
+    </v-alert>
+  </v-overlay>
 </template>
 
 <script>
