@@ -1,20 +1,28 @@
 <template>
-  <v-container class="text-center" fluid>
-    <img alt="website logotype" src="../assets/logo.png" />
-    <MainContent msg="The Challenge" />
-  </v-container>
+  <v-main>
+    <HeaderBar />
+    <v-container class="text-center" fluid>
+      <img alt="website logotype" src="../assets/logo.png" />
+      <h2>{{ helloMessage }}</h2>
+    </v-container>
+  </v-main>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
-import MainContent from '@/components/RegistrationContent.vue';
+import Vue from 'vue';
+import HeaderBar from '@/components/HeaderBar.vue';
+import { mapState } from 'vuex';
 
-@Component({
-  components: {
-    MainContent,
+export default Vue.extend({
+  name: 'App',
+  components: { HeaderBar },
+  computed: {
+    ...mapState({
+      helloMessage: 'helloMessage',
+    }),
   },
-})
-export default class HomeView extends Vue {}
+  data: () => ({}),
+});
 </script>
 
 <style scoped lang="scss">
