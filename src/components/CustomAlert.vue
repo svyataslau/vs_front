@@ -1,34 +1,24 @@
 <template>
-  <v-overlay
-    :absolute="true"
-    :opacity="0.9"
-    :value="value"
-    color="grey lighten-5"
-  >
-    <v-alert outlined shaped :type="type" :value="value">
-      {{ message }}
-    </v-alert>
-  </v-overlay>
+  <v-snackbar v-model="isVisible" color="pink lighten-1" shaped>
+    <v-icon>mdi-alert-circle-outline</v-icon>
+    {{ alert.message }}
+    <template v-slot:action="{ attrs }">
+      <v-btn text v-bind="attrs" @click="isVisible = false"> Close</v-btn>
+    </template>
+  </v-snackbar>
 </template>
 
 <script>
 export default {
   name: 'CustomAlert',
   props: {
-    message: {
-      type: String,
+    alert: {
+      type: Object,
       required: true,
     },
-    type: {
-      type: String,
-      default: 'warning',
-    },
-    value: {
-      type: Boolean,
-      default: false,
-    },
   },
+  data: () => ({
+    isVisible: true,
+  }),
 };
 </script>
-
-<style scoped></style>

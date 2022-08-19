@@ -1,7 +1,6 @@
 import axios from 'axios';
-import { vm } from '@/main';
+import router from '@/router';
 import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
-import { RootState } from '@/store/index';
 
 const apiUrl = axios.create({
   baseURL: process.env.VUE_APP_API_DEFAULT_URL,
@@ -9,79 +8,85 @@ const apiUrl = axios.create({
 
 export interface ProfileState {
   isAuthorized: boolean;
+  userData: object;
 }
 
-const state: ProfileState = {
-  isAuthorized: false,
+export const getters: GetterTree<ProfileState, any> = {
+  IS_AUTHORIZED: (state) => state.isAuthorized,
+  USER_DATA: (state) => state.userData,
 };
-
-export const getters: GetterTree<ProfileState, RootState> = {
-  getAuthorized(state): boolean {
-    return state.isAuthorized;
-  },
-};
-
-export enum ProfileMutations {
-  SET_IS_AUTHORIZED = 'SET_IS_AUTHORIZED',
-}
 
 export const mutations: MutationTree<ProfileState> = {
-  [ProfileMutations.SET_IS_AUTHORIZED](state, payload: boolean) {
+  SET_IS_AUTHORIZED(state, payload: boolean) {
     state.isAuthorized = payload;
+  },
+  SET_USER_DATA(state, payload: object) {
+    state.userData = payload;
   },
 };
 
-export enum ProfileActions {
-  LOGIN = 'LOGIN',
-  LOGOUT = 'LOGOUT',
-  REGISTER = 'REGISTER',
-}
-
-export const actions: ActionTree<ProfileState, RootState> = {
-  [ProfileActions.REGISTER]({ commit, dispatch }, payload) {
+export const actions: ActionTree<ProfileState, any> = {
+  REGISTER({ commit, dispatch }, payload) {
     apiUrl
       .post('/users', payload)
       .then((res) => {
         if (res.status === 201) {
-          commit(ProfileMutations.SET_IS_AUTHORIZED, true);
-          localStorage.setItem('userData', JSON.stringify(res.data.data));
-          vm.$router.push('/');
+          commit('SET_IS_AUTHORIZED', true);
+          commit('SET_USER_DATA', res.data.data);
+          router.push('/');
         }
       })
       .catch((e) => {
-        dispatch('SHOW_ALERT', e.response.data.message, {
-          root: true,
-        });
+        dispatch(
+          'CREATE_ALERT',
+          { message: e.response.data.message },
+          {
+            root: true,
+          }
+        );
       });
   },
-  [ProfileActions.LOGIN]({ commit, dispatch }, payload) {
+  LOGIN({ commit, dispatch }, payload) {
     apiUrl
       .post('/users/login', payload)
       .then((res) => {
         if (res.status === 200) {
-          commit(ProfileMutations.SET_IS_AUTHORIZED, true);
-          localStorage.setItem('userData', JSON.stringify(res.data.data));
-          vm.$router.push('/');
+          commit('SET_IS_AUTHORIZED', true);
+          commit('SET_USER_DATA', res.data.data);
+          router.push('/');
         }
       })
       .catch((e) => {
-        dispatch('SHOW_ALERT', e.response.data.message, {
-          root: true,
-        });
+        dispatch(
+          'CREATE_ALERT',
+          { message: e.response.data.message },
+          {
+            root: true,
+          }
+        );
       });
   },
-  [ProfileActions.LOGOUT]({ commit }) {
+  LOGOUT({ commit, dispatch }) {
     try {
-      commit(ProfileMutations.SET_IS_AUTHORIZED, false);
-      localStorage.removeItem('userData');
+      commit('SET_IS_AUTHORIZED', false);
+      commit('SET_USER_DATA', {});
     } catch (e) {
-      console.log(e);
+      dispatch(
+        'CREATE_ALERT',
+        { message: 'Logout failed!' },
+        {
+          root: true,
+        }
+      );
     }
   },
 };
 
-export const profile: Module<ProfileState, RootState> = {
-  state,
+export const profile: Module<ProfileState, any> = {
+  state: {
+    isAuthorized: false,
+    userData: {},
+  },
   getters,
   mutations,
   actions,
