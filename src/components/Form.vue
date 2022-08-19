@@ -5,7 +5,7 @@
       <v-text-field
         v-if="isRegistrationPage"
         color="black"
-        v-model="credentials.nickname"
+        v-model="user.nickname"
         :rules="validationRules.nicknameRules"
         label="Nickname"
         required
@@ -13,7 +13,7 @@
 
       <v-text-field
         color="black"
-        v-model="credentials.email"
+        v-model="user.email"
         :rules="validationRules.emailRules"
         label="Email"
         required
@@ -21,7 +21,7 @@
 
       <v-text-field
         color="black"
-        v-model="credentials.password"
+        v-model="user.password"
         :rules="validationRules.passwordRules"
         label="Password"
         required
@@ -49,7 +49,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { ProfileActions } from '@/store/modules/profile';
 import validationRules from '@/helpers/validationRules';
 
 export default Vue.extend({
@@ -59,7 +58,7 @@ export default Vue.extend({
   },
   data: () => ({
     valid: true,
-    credentials: {
+    user: {
       nickname: '',
       email: 'letsgo763@gmail.com', //mocked
       password: 'somePass32', //mocked
@@ -74,16 +73,16 @@ export default Vue.extend({
   methods: {
     submit() {
       if (this.$route.name === 'login') {
-        this.$store.dispatch(ProfileActions.LOGIN, {
-          email: this.credentials.email,
-          password: this.credentials.password,
+        this.$store.dispatch('LOGIN', {
+          email: this.user.email,
+          password: this.user.password,
         });
       }
       if (this.$route.name === 'registration') {
-        this.$store.dispatch(ProfileActions.REGISTER, {
-          nickname: this.credentials.nickname,
-          email: this.credentials.email,
-          password: this.credentials.password,
+        this.$store.dispatch('REGISTER', {
+          nickname: this.user.nickname,
+          email: this.user.email,
+          password: this.user.password,
         });
       }
     },

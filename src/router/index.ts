@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 import LoginView from '../views/LoginView.vue';
 import HomeView from '../views/HomeView.vue';
+import store from '@/store';
 
 Vue.use(VueRouter);
 
@@ -11,8 +12,7 @@ const routes: Array<RouteConfig> = [
     name: 'home',
     component: HomeView,
     beforeEnter: (to, from, next) => {
-      const isAuthorized = !!localStorage.getItem('userData');
-      if (isAuthorized) {
+      if (store.getters.IS_AUTHORIZED) {
         next();
       } else {
         next({ name: 'login' });

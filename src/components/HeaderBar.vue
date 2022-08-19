@@ -22,15 +22,11 @@
 </template>
 
 <script>
-import { ProfileActions } from '@/store/modules/profile';
-
 export default {
   name: 'HeaderBar',
   methods: {
     signOut() {
-      this.$store
-        .dispatch(ProfileActions.LOGOUT)
-        .then(() => this.$router.push('login'));
+      this.$store.dispatch('LOGOUT').then(() => this.$router.push('login'));
     },
   },
 };

@@ -3,14 +3,19 @@
     <v-main class="grey lighten-5">
       <router-view />
     </v-main>
-    <CustomAlert :value="isAlertVisible" :message="alertMessage" />
+    <CustomAlert
+      v-for="(alert, index) in alerts"
+      :key="index"
+      :alert="alert"
+      :style="{ 'margin-bottom': calculateMargin(index) }"
+    />
   </v-app>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import CustomAlert from '@/components/CustomAlert.vue';
 import { mapGetters } from 'vuex';
+import CustomAlert from '@/components/CustomAlert.vue';
 
 export default Vue.extend({
   name: 'App',
@@ -19,9 +24,13 @@ export default Vue.extend({
   },
   computed: {
     ...mapGetters({
-      alertMessage: 'getAlertMessage',
-      isAlertVisible: 'getIsAlertVisible',
+      alerts: 'ALERTS',
     }),
+  },
+  methods: {
+    calculateMargin(index: number) {
+      return index * 80 + 'px';
+    },
   },
 });
 </script>

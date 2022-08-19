@@ -2,10 +2,8 @@
   <v-main class="d-flex align-center fill-height">
     <v-container class="d-flex flex-column align-center" fluid>
       <img alt="website logotype" src="../assets/logo.png" />
-      <Form :title="titles.headingName" class="col-12 col-sm-10 col-md-6" />
-      <v-btn text @click="redirectToRoute"
-        >{{ titles.redirectButtonName }}
-      </v-btn>
+      <Form :title="headingName" class="col-12 col-sm-10 col-md-6" />
+      <v-btn text @click="redirectToRoute">{{ redirectButtonName }} </v-btn>
     </v-container>
   </v-main>
 </template>
@@ -20,12 +18,11 @@ export default Vue.extend({
     Form,
   },
   computed: {
-    titles() {
-      return {
-        headingName: this.$route.name == 'login' ? 'Login' : 'Registration',
-        redirectButtonName:
-          this.$route.name == 'login' ? 'Registration page' : 'Login page',
-      };
+    headingName() {
+      return this.$route.name == 'login' ? 'Login' : 'Registration';
+    },
+    redirectButtonName() {
+      return this.$route.name == 'login' ? 'Registration page' : 'Login page';
     },
   },
   methods: {
