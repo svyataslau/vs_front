@@ -17,4 +17,9 @@ export default {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(v) ||
       'Invalid password. The password must consist of uppercase and lowercase Latin letters and be at least 8 characters long!',
   ],
+  dayTimerRules: [(v: number) => v > 0 || 'Enter a positive number'],
+  description: [
+    (v: string) =>
+      v.length < 2048 || '\n' + 'You can enter up to 2048 characters',
+  ],
 };

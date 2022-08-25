@@ -80,6 +80,25 @@ export const actions: ActionTree<ProfileState, any> = {
       );
     }
   },
+  REFRESH_USER_DATA({ commit, getters, dispatch }) {
+    const userId = getters.USER_DATA?.id;
+    apiUrl
+      .get(`/users/${userId}`)
+      .then((res) => {
+        if (res.status === 200) {
+          commit('SET_USER_DATA', res.data.data);
+        }
+      })
+      .catch((e) => {
+        dispatch(
+          'CREATE_ALERT',
+          { message: e.response.data.message },
+          {
+            root: true,
+          }
+        );
+      });
+  },
 };
 
 export const profile: Module<ProfileState, any> = {
