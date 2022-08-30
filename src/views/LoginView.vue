@@ -1,9 +1,9 @@
 <template>
   <v-main class="d-flex align-center fill-height">
     <v-container class="d-flex flex-column align-center" fluid>
-      <img alt="website logotype" src="../assets/logo.png" />
+      <v-img src="../assets/logo.png" max-height="120" max-width="120" />
       <Form :title="headingName" class="col-12 col-sm-10 col-md-6" />
-      <v-btn text @click="redirectToRoute">{{ redirectButtonName }} </v-btn>
+      <v-btn text @click="redirectToRoute">{{ redirectButtonName }}</v-btn>
     </v-container>
   </v-main>
 </template>
@@ -36,10 +36,3 @@ export default Vue.extend({
   },
 });
 </script>
-
-<style scoped lang="scss">
-img {
-  height: 100px;
-  width: 100px;
-}
-</style>

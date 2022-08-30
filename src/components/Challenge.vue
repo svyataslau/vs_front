@@ -1,44 +1,34 @@
 <template>
   <v-card
-    class="my-2 d-flex flex-row col-12"
-    max-height="150"
+    class="my-4 d-flex flex-row col-12"
+    max-height="250"
     elevation="2"
     outlined
     shaped
   >
-    <v-col class="col-7 col-md-8 col-lg-9 pa-0 text-left">
+    <v-col cols="7" md="8" lg="9" class="pa-0">
       <h5 class="text-h5 ma-4 text-truncate">
         {{ challenge.title }}
       </h5>
-      <h6
-        class="text-body-2 ma-4"
-        style="
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          max-height: 60px;
-        "
-      >
+      <h6 class="text-body-2 ma-4 challenge-description">
         {{ challenge.description }}
       </h6>
     </v-col>
-    <v-col class="col-4 col-md-3 col-lg-2 d-flex justify-center align-center">
+    <v-col cols="4" md="3" lg="2" class="d-flex justify-center align-center">
       <v-progress-circular
         :rotate="-90"
         :size="100"
         :width="10"
         :value="procent"
-        :color="color"
+        color="primary"
       >
-        <v-icon x-large :color="color" v-if="this.procent >= 100">
+        <v-icon x-large color="primary" v-if="procent >= 100">
           mdi-check-bold
         </v-icon>
-        <span v-else>{{ descriptionString }}</span>
+        <span v-else class="text-body-2">{{ progressMessage }}</span>
       </v-progress-circular>
     </v-col>
-    <v-col class="col-1 d-flex justify-center align-center">
+    <v-col cols="1" class="d-flex justify-center align-center">
       <v-card-actions class="d-flex flex-column">
         <v-btn
           elevation="2"
@@ -78,13 +68,16 @@ export default {
     return {
       interval: {},
       procent: 0,
-      color: 'blue lighten-1',
-      descriptionString: '',
+      progressMessage: '',
       repeatIntervalIn: 0,
     };
   },
   mounted() {
+    this.generateTimerObject();
     this.runInterval();
+  },
+  beforeDestroy() {
+    clearInterval(this.interval);
   },
   watch: {
     repeatIntervalIn() {
@@ -110,7 +103,6 @@ export default {
         console.log('run');
         this.generateTimerObject();
         if (this.procent >= 100) {
-          this.color = 'green lighten-1';
           clearInterval(this.interval);
         }
       }, this.repeatIntervalIn);
@@ -153,17 +145,18 @@ export default {
         },
       ];
       const founded = timeArray.find((element) => element.days > 0);
-      this.descriptionString =
-        !!founded && `${founded.days} ${founded.description()}`;
-      this.repeatIntervalIn = founded.repeatIntervalIn;
-      this.countProcent();
+      if (founded) {
+        this.progressMessage = `${founded.days} ${founded.description()}`;
+        this.repeatIntervalIn = founded.repeatIntervalIn;
+        this.countProcent();
+      }
     },
 
     openEditDialog() {
       const newChallenge = {
         ...this.challenge,
         description:
-          'Lorem Ipsum has been the standard dummy text ever since the 1500,',
+          'Lorem Ipsum has been the standard dummy text ever since the 1500,Lorem Ipsum hasever since the text ever since the 1500',
       };
       this.$store.dispatch('UPDATE_FULL_CHALLENGE', newChallenge);
     },
@@ -175,4 +168,13 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.challenge-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 60px;
+}
+</style>

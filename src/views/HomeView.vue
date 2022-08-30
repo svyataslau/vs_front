@@ -2,13 +2,12 @@
   <v-main>
     <HeaderBar />
     <v-row class="mt-2" no-gutters>
-      <v-col cols="12" md="6">
-        <v-row class="d-flex align-center justify-space-between px-11 ma-0">
+      <v-col cols="12" md="6" class="mx-auto">
+        <v-row align="center" justify="space-between" class="px-11 mx-0 my-4">
           <h4 class="text-h4">My Challenges</h4>
-          <EditPromiseDialog class="ma-4" />
-          <PromiseDialog />
+          <ChallengeDialog />
         </v-row>
-        <v-sheet class="ma-0 px-4 transparent" height="500px">
+        <v-sheet class="ma-0 px-4 transparent" height="600">
           <Challenge
             v-for="fullChallengeOfUser in historyList"
             :key="fullChallengeOfUser.id"
@@ -24,6 +23,12 @@
           @input="updatePage"
         ></v-pagination>
       </v-col>
+      <v-col cols="12" md="6" v-if="$vuetify.breakpoint.mdAndUp && isAdmin">
+        <v-row align="center" justify="space-between" class="px-11 ma-0">
+          <h4 class="text-h4">Admin</h4>
+          <EditPromiseDialog class="ma-4" />
+        </v-row>
+      </v-col>
     </v-row>
   </v-main>
 </template>
@@ -31,14 +36,14 @@
 <script lang="ts">
 import Vue from 'vue';
 import HeaderBar from '@/components/HeaderBar.vue';
-import PromiseDialog from '@/components/PromiseDialog.vue';
+import ChallengeDialog from '@/components/ChallengeDialog.vue';
 import EditPromiseDialog from '@/components/EditPromiseDialog.vue';
 import Challenge from '@/components/Challenge.vue';
 import { mapGetters } from 'vuex';
 
 export default Vue.extend({
   name: 'App',
-  components: { PromiseDialog, EditPromiseDialog, HeaderBar, Challenge },
+  components: { ChallengeDialog, EditPromiseDialog, HeaderBar, Challenge },
   data: () => {
     return {
       page: 1,
@@ -88,6 +93,7 @@ export default Vue.extend({
     ...mapGetters({
       fullChallengesOfUser: 'FULL_CHALLENGES_OF_USER',
       userData: 'USER_DATA',
+      isAdmin: 'IS_ADMIN',
     }),
     pages() {
       if (this.pageSize == null || this.challenges.length == null) return 0;
@@ -96,14 +102,3 @@ export default Vue.extend({
   },
 });
 </script>
-
-<style scoped lang="scss">
-img {
-  height: 100px;
-  width: 100px;
-}
-
-.promises-item {
-  min-height: 100px;
-}
-</style>

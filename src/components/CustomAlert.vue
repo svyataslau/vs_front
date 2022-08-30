@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar v-model="isVisible" color="pink lighten-1" shaped>
+  <v-snackbar v-model="isVisible" color="warning" shaped>
     <v-icon>mdi-alert-circle-outline</v-icon>
     {{ alert.message }}
     <template v-slot:action="{ attrs }">

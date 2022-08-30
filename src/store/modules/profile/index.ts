@@ -9,11 +9,13 @@ const apiUrl = axios.create({
 export interface ProfileState {
   isAuthorized: boolean;
   userData: object;
+  isAdmin: boolean;
 }
 
 export const getters: GetterTree<ProfileState, any> = {
   IS_AUTHORIZED: (state) => state.isAuthorized,
   USER_DATA: (state) => state.userData,
+  IS_ADMIN: (state) => state.isAdmin,
 };
 
 export const mutations: MutationTree<ProfileState> = {
@@ -105,6 +107,7 @@ export const profile: Module<ProfileState, any> = {
   state: {
     isAuthorized: false,
     userData: {},
+    isAdmin: false,
   },
   getters,
   mutations,
