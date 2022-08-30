@@ -1,7 +1,6 @@
 <template>
   <v-card
-    class="mx-auto my-4 d-flex flex-row"
-    max-width="700"
+    class="my-2 d-flex flex-row col-12"
     max-height="150"
     elevation="2"
     outlined
