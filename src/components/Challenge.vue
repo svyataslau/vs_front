@@ -35,7 +35,7 @@
         <v-icon x-large :color="color" v-if="this.procent >= 100">
           mdi-check-bold
         </v-icon>
-        <span v-else>{{ message }}</span>
+        <span v-else>{{ descriptionString }}</span>
       </v-progress-circular>
     </v-col>
     <v-col class="col-1 d-flex justify-center align-center">
@@ -79,7 +79,7 @@ export default {
       interval: {},
       procent: 0,
       color: 'blue lighten-1',
-      timerObject: {},
+      descriptionString: '',
       repeatIntervalIn: 0,
     };
   },
@@ -152,9 +152,10 @@ export default {
           repeatIntervalIn: oneSecondInMiliseconds,
         },
       ];
-      this.timerObject = timeArray.find((element) => element.days > 0);
-      this.timerObject.descriptionString = this.timerObject.description();
-      this.repeatIntervalIn = this.timerObject.repeatIntervalIn;
+      const founded = timeArray.find((element) => element.days > 0);
+      this.descriptionString =
+        !!founded && `${founded.days} ${founded.description()}`;
+      this.repeatIntervalIn = founded.repeatIntervalIn;
       this.countProcent();
     },
 
@@ -169,11 +170,6 @@ export default {
 
     openDeleteDialog() {
       this.$store.dispatch('DELETE_FULL_CHALLENGE', this.challenge);
-    },
-  },
-  computed: {
-    message() {
-      return `${this.timerObject?.days} ${this.timerObject?.descriptionString}`;
     },
   },
 };
