@@ -31,9 +31,12 @@
         :size="100"
         :width="10"
         :value="procent"
-        color="primary"
+        :color="color"
       >
-        {{ days }}
+        <v-icon x-large :color="color" v-if="this.procent >= 100">
+          mdi-check-bold
+        </v-icon>
+        <span v-else>{{ message }}</span>
       </v-progress-circular>
     </v-col>
     <v-col class="col-1 d-flex justify-center align-center">
@@ -48,7 +51,14 @@
         >
           <v-icon>mdi-pencil-outline</v-icon>
         </v-btn>
-        <v-btn elevation="2" icon outlined text class="ma-2">
+        <v-btn
+          elevation="2"
+          icon
+          outlined
+          text
+          class="ma-2"
+          @click="openDeleteDialog"
+        >
           <v-icon>mdi-delete-outline</v-icon>
         </v-btn>
       </v-card-actions>
@@ -68,43 +78,55 @@ export default {
   data() {
     return {
       interval: {},
-      days: '',
       procent: 0,
+      color: 'blue lighten-1',
+      timerObject: {},
+      repeatIntervalIn: 0,
     };
   },
-  beforeDestroy() {
-    clearInterval(this.interval);
-  },
   mounted() {
-    this.interval = setInterval(() => {
-      this.procent = this.countProcent();
-      this.days = this.countDays();
-    }, 1000);
+    this.runInterval();
+  },
+  watch: {
+    repeatIntervalIn() {
+      clearInterval(this.interval);
+      this.runInterval();
+    },
   },
   methods: {
-    openEditDialog() {
-      const newChallenge = {
-        ...this.challenge,
-        description:
-          'Lorem Ipsum has been the industrys standard dummy text ever since the 1500,',
-      };
-      this.$store.dispatch('UPDATE_FULL_CHALLENGE', newChallenge);
-    },
     countProcent() {
       const oneDayInMiliseconds = 86400000;
       const daysNumberInMiliseconds =
         this.challenge.days_number * oneDayInMiliseconds;
-      const pastMiliseconds =
-        Date.now() - Date.parse(this.challenge.start_date);
-      return (pastMiliseconds / daysNumberInMiliseconds) * 100;
+      let startTime = new Date(this.challenge.start_date);
+      startTime = new Date(
+        startTime.getTime() + startTime.getTimezoneOffset() * 60000
+      );
+      const pastMiliseconds = Date.now() - Date.parse(startTime);
+      this.procent = (pastMiliseconds / daysNumberInMiliseconds) * 100;
     },
-    countDays() {
+
+    runInterval() {
+      this.interval = setInterval(() => {
+        console.log('run');
+        this.generateTimerObject();
+        if (this.procent >= 100) {
+          this.color = 'green lighten-1';
+          clearInterval(this.interval);
+        }
+      }, this.repeatIntervalIn);
+    },
+
+    generateTimerObject() {
       const oneDayInMiliseconds = 86400000;
       const oneHourInMiliseconds = 3600000;
       const oneMinuteInMiliseconds = 60000;
       const oneSecondInMiliseconds = 1000;
-      const pastMiliseconds =
-        Date.now() - Date.parse(this.challenge.start_date);
+      let startTime = new Date(this.challenge.start_date);
+      startTime = new Date(
+        startTime.getTime() + startTime.getTimezoneOffset() * 60000
+      );
+      const pastMiliseconds = Date.now() - Date.parse(startTime);
       const countDays = Math.trunc(pastMiliseconds / oneDayInMiliseconds);
       const countHours = Math.trunc(pastMiliseconds / oneHourInMiliseconds);
       const countMinutes = Math.trunc(pastMiliseconds / oneMinuteInMiliseconds);
@@ -113,22 +135,46 @@ export default {
         {
           days: countDays,
           description: () => (countDays > 1 ? 'days' : 'day'),
+          repeatIntervalIn: oneDayInMiliseconds,
         },
         {
           days: countHours,
           description: () => (countHours > 1 ? 'hours' : 'hour'),
+          repeatIntervalIn: oneHourInMiliseconds,
         },
         {
           days: countMinutes,
           description: () => (countMinutes > 1 ? 'minutes' : 'minute'),
+          repeatIntervalIn: oneMinuteInMiliseconds,
         },
         {
           days: countSeconds,
           description: () => (countSeconds > 1 ? 'seconds' : 'second'),
+          repeatIntervalIn: oneSecondInMiliseconds,
         },
       ];
-      const final = timeArray.find((element) => element.days > 0);
-      return `${final?.days} ${final?.description()}`;
+      this.timerObject = timeArray.find((element) => element.days > 0);
+      this.timerObject.descriptionString = this.timerObject.description();
+      this.repeatIntervalIn = this.timerObject.repeatIntervalIn;
+      this.countProcent();
+    },
+
+    openEditDialog() {
+      const newChallenge = {
+        ...this.challenge,
+        description:
+          'Lorem Ipsum has been the standard dummy text ever since the 1500,',
+      };
+      this.$store.dispatch('UPDATE_FULL_CHALLENGE', newChallenge);
+    },
+
+    openDeleteDialog() {
+      this.$store.dispatch('DELETE_FULL_CHALLENGE', this.challenge);
+    },
+  },
+  computed: {
+    message() {
+      return `${this.timerObject?.days} ${this.timerObject?.descriptionString}`;
     },
   },
 };

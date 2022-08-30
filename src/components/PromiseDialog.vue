@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import validationRules from '@/helpers/validationRules';
 
 export default {
@@ -78,7 +78,6 @@ export default {
       promises: 'PROMISES',
       userData: 'USER_DATA',
     }),
-    ...mapActions(['LOAD_FULL_CHALLENGES']),
     isValidCreatedPromise() {
       return this.promise?.id != undefined && !!this.description.length;
     },
