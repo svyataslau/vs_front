@@ -30,23 +30,16 @@
     </v-col>
     <v-col cols="1" class="d-flex justify-center align-center">
       <v-card-actions class="d-flex flex-column">
-        <v-btn
-          elevation="2"
-          icon
-          outlined
-          text
-          class="ma-2"
-          @click="openEditDialog"
-        >
+        <ChallengeDialog :challenge="challenge" :actionType="'edit'">
           <v-icon>mdi-pencil-outline</v-icon>
-        </v-btn>
+        </ChallengeDialog>
         <v-btn
           elevation="2"
           icon
           outlined
           text
           class="ma-2"
-          @click="openDeleteDialog"
+          @click="deleteChallenge"
         >
           <v-icon>mdi-delete-outline</v-icon>
         </v-btn>
@@ -56,8 +49,11 @@
 </template>
 
 <script>
+import ChallengeDialog from '@/components/ChallengeDialog.vue';
+
 export default {
   name: 'Challenge',
+  components: { ChallengeDialog },
   props: {
     challenge: {
       type: Object,
@@ -69,10 +65,10 @@ export default {
       interval: {},
       procent: 0,
       progressMessage: '',
-      repeatIntervalIn: 0,
+      repeatIntervalIn: 1000,
     };
   },
-  mounted() {
+  created() {
     this.generateTimerObject();
     this.runInterval();
   },
@@ -100,7 +96,6 @@ export default {
 
     runInterval() {
       this.interval = setInterval(() => {
-        console.log('run');
         this.generateTimerObject();
         if (this.procent >= 100) {
           clearInterval(this.interval);
@@ -152,16 +147,7 @@ export default {
       }
     },
 
-    openEditDialog() {
-      const newChallenge = {
-        ...this.challenge,
-        description:
-          'Lorem Ipsum has been the standard dummy text ever since the 1500,Lorem Ipsum hasever since the text ever since the 1500',
-      };
-      this.$store.dispatch('UPDATE_FULL_CHALLENGE', newChallenge);
-    },
-
-    openDeleteDialog() {
+    deleteChallenge() {
       this.$store.dispatch('DELETE_FULL_CHALLENGE', this.challenge);
     },
   },

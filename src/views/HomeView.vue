@@ -5,7 +5,9 @@
       <v-col cols="12" md="6" class="mx-auto">
         <v-row align="center" justify="space-between" class="px-11 mx-0 my-4">
           <h4 class="text-h4">My Challenges</h4>
-          <ChallengeDialog />
+          <ChallengeDialog large color="primary" :actionType="'create'">
+            <v-icon dark> mdi-plus-thick</v-icon>
+          </ChallengeDialog>
         </v-row>
         <v-sheet class="ma-0 px-4 transparent" height="600">
           <Challenge
@@ -43,7 +45,7 @@ import { mapGetters } from 'vuex';
 
 export default Vue.extend({
   name: 'App',
-  components: { ChallengeDialog, EditPromiseDialog, HeaderBar, Challenge },
+  components: { EditPromiseDialog, HeaderBar, Challenge, ChallengeDialog },
   data: () => {
     return {
       page: 1,
@@ -75,7 +77,7 @@ export default Vue.extend({
   },
   watch: {
     userData: {
-      handler(newVal, oldVal) {
+      handler() {
         this.challenges = [...this.userData?.challenges].reverse();
         this.initPage();
         this.updatePage(this.page);

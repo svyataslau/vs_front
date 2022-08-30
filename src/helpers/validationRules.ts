@@ -20,6 +20,6 @@ export default {
   dayTimerRules: [(v: number) => v > 0 || 'Enter a positive number'],
   description: [
     (v: string) =>
-      v.length < 2048 || '\n' + 'You can enter up to 2048 characters',
+      v?.length < 2048 || '\n' + 'You can enter up to 2048 characters',
   ],
 };
