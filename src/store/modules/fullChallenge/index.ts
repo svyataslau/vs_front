@@ -22,7 +22,7 @@ export const mutations: MutationTree<FullChallengeState> = {
 export const actions: ActionTree<FullChallengeState, any> = {
   CREATE_FULL_CHALLENGE({ commit, dispatch }, payload) {
     apiUrl
-      .post('/full_challenges', payload)
+      .post('/challenges', payload)
       .then((res) => {
         if (res.status === 200) {
           dispatch('REFRESH_USER_DATA', {
@@ -42,7 +42,7 @@ export const actions: ActionTree<FullChallengeState, any> = {
   },
   UPDATE_FULL_CHALLENGE({ commit, dispatch }, payload) {
     apiUrl
-      .put(`/full_challenges/${payload.id}`, payload)
+      .put(`/challenges/${payload.id}`, payload)
       .then((res) => {
         if (res.status === 200) {
           dispatch('REFRESH_USER_DATA', {
@@ -62,7 +62,7 @@ export const actions: ActionTree<FullChallengeState, any> = {
   },
   DELETE_FULL_CHALLENGE({ commit, dispatch }, payload) {
     apiUrl
-      .delete(`/full_challenges/${payload.id}`, payload)
+      .delete(`/challenges/${payload.id}`, payload)
       .then((res) => {
         if (res.status === 200) {
           dispatch('REFRESH_USER_DATA', {

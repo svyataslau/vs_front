@@ -104,7 +104,7 @@ export default {
       userData: 'USER_DATA',
     }),
     isValidCreatedPromise() {
-      return this.promise?.id !== undefined && !!this.description?.length;
+      return this.promise?.id && this.description.length > 0;
     },
     dialogTitle() {
       if (this.actionType === 'edit') {

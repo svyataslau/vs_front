@@ -36,29 +36,35 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import HeaderBar from '@/components/HeaderBar.vue';
 import ChallengeDialog from '@/components/ChallengeDialog.vue';
 import EditPromiseDialog from '@/components/EditPromiseDialog.vue';
 import Challenge from '@/components/Challenge.vue';
 import { mapGetters } from 'vuex';
 
-export default Vue.extend({
+interface ChallengeType {
+  id: number;
+  user_id: number;
+  promise_id: number;
+  start_date: string;
+  days_number: number;
+  title: string;
+  description: string;
+}
+
+export default defineComponent({
   name: 'App',
   components: { EditPromiseDialog, HeaderBar, Challenge, ChallengeDialog },
   data: () => {
     return {
       page: 1,
       pageSize: 3,
-      historyList: [],
+      historyList: [] as ChallengeType[],
       isOverlayVisible: false,
-      challenges: [],
+      challenges: [] as ChallengeType[],
+      stopwatch: null,
     };
-  },
-  created() {
-    this.challenges = [...this.userData?.challenges].reverse();
-    this.initPage();
-    this.updatePage(this.page);
   },
   methods: {
     initPage() {
@@ -68,7 +74,7 @@ export default Vue.extend({
         this.historyList = this.challenges.slice(0, this.pageSize);
       }
     },
-    updatePage(pageIndex) {
+    updatePage(pageIndex: number) {
       let start = (pageIndex - 1) * this.pageSize;
       let end = pageIndex * this.pageSize;
       this.historyList = this.challenges.slice(start, end);
@@ -77,12 +83,13 @@ export default Vue.extend({
   },
   watch: {
     userData: {
-      handler() {
-        this.challenges = [...this.userData?.challenges].reverse();
+      handler(newVal) {
+        console.log('watcher');
+        this.challenges = [...newVal.challenges].reverse();
         this.initPage();
         this.updatePage(this.page);
       },
-      deep: true,
+      immediate: true,
     },
     historyList(val) {
       if (val.length == 0) {
@@ -97,7 +104,7 @@ export default Vue.extend({
       userData: 'USER_DATA',
       isAdmin: 'IS_ADMIN',
     }),
-    pages() {
+    pages(): number {
       if (this.pageSize == null || this.challenges.length == null) return 0;
       return Math.ceil(this.challenges.length / this.pageSize);
     },

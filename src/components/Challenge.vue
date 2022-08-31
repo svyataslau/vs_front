@@ -48,21 +48,33 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
 import ChallengeDialog from '@/components/ChallengeDialog.vue';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 
-export default {
+interface ChallengeType {
+  id: number;
+  user_id: number;
+  promise_id: number;
+  start_date: string;
+  days_number: number;
+  title: string;
+  description: string;
+}
+
+export default defineComponent({
   name: 'Challenge',
   components: { ChallengeDialog },
   props: {
     challenge: {
-      type: Object,
+      type: Object as PropType<ChallengeType>,
       required: true,
     },
   },
   data() {
     return {
-      interval: {},
+      interval: 0,
       procent: 0,
       progressMessage: '',
       repeatIntervalIn: 1000,
@@ -82,7 +94,7 @@ export default {
     },
   },
   methods: {
-    countProcent() {
+    countProcent(): void {
       const oneDayInMiliseconds = 86400000;
       const daysNumberInMiliseconds =
         this.challenge.days_number * oneDayInMiliseconds;
@@ -90,11 +102,11 @@ export default {
       startTime = new Date(
         startTime.getTime() + startTime.getTimezoneOffset() * 60000
       );
-      const pastMiliseconds = Date.now() - Date.parse(startTime);
+      const pastMiliseconds = Date.now() - Date.parse(startTime.toString());
       this.procent = (pastMiliseconds / daysNumberInMiliseconds) * 100;
     },
 
-    runInterval() {
+    runInterval(): void {
       this.interval = setInterval(() => {
         this.generateTimerObject();
         if (this.procent >= 100) {
@@ -103,7 +115,7 @@ export default {
       }, this.repeatIntervalIn);
     },
 
-    generateTimerObject() {
+    generateTimerObject(): void {
       const oneDayInMiliseconds = 86400000;
       const oneHourInMiliseconds = 3600000;
       const oneMinuteInMiliseconds = 60000;
@@ -112,7 +124,7 @@ export default {
       startTime = new Date(
         startTime.getTime() + startTime.getTimezoneOffset() * 60000
       );
-      const pastMiliseconds = Date.now() - Date.parse(startTime);
+      const pastMiliseconds = Date.now() - Date.parse(startTime.toString());
       const countDays = Math.trunc(pastMiliseconds / oneDayInMiliseconds);
       const countHours = Math.trunc(pastMiliseconds / oneHourInMiliseconds);
       const countMinutes = Math.trunc(pastMiliseconds / oneMinuteInMiliseconds);
@@ -147,11 +159,11 @@ export default {
       }
     },
 
-    deleteChallenge() {
+    deleteChallenge(): void {
       this.$store.dispatch('DELETE_FULL_CHALLENGE', this.challenge);
     },
   },
-};
+});
 </script>
 
 <style scoped>
