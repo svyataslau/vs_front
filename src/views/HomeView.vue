@@ -23,9 +23,9 @@
         </v-sheet>
         <v-pagination
           v-if="challenges.length > pageSize"
+          v-model="page"
           circle
           class="mb-2"
-          v-model="page"
           :length="pages"
           @input="updatePage"
         ></v-pagination>

@@ -1,10 +1,10 @@
 <template>
   <v-card
-    class="ma-4 pa-0 d-flex flex-row"
+    shaped
+    outlined
     max-height="60"
     elevation="2"
-    outlined
-    shaped
+    class="ma-4 pa-0 d-flex flex-row"
   >
     <v-col cols="8" sm="9" class="d-flex align-center pa-0">
       <h6 class="text-body-2 text-md-subtitle-1 ma-4">
@@ -17,8 +17,8 @@
           <v-icon>mdi-pencil-outline</v-icon>
         </PromiseDialog>
         <ApproveDialog
-          @callback="deleteCategory"
           :message="'Would you like to delete this category?'"
+          @callback="deletePromise"
         >
           <v-icon>mdi-delete-outline</v-icon>
         </ApproveDialog>
@@ -47,7 +47,7 @@ export default defineComponent({
     },
   },
   methods: {
-    deleteCategory(): void {
+    deletePromise(): void {
       this.$store.dispatch('DELETE_PROMISE', this.promise);
     },
   },

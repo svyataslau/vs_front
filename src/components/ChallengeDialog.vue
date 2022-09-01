@@ -7,29 +7,31 @@
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         fab
+        v-blur
         :color="color"
         :small="!large"
         :large="large"
         v-bind="attrs"
         v-on="on"
-        v-blur
       >
         <slot></slot>
       </v-btn>
     </template>
-    <v-form ref="form">
+    <v-form ref="form" v-model="isValid">
       <v-card>
         <v-card-title>{{ dialogTitle }}</v-card-title>
         <v-divider></v-divider>
         <v-card-text>
           <v-select
+            outlined
+            return-object
+            item-text="title"
+            label="Challenge category"
             class="mt-4"
             v-model="promise"
             :items="promises"
-            item-text="title"
-            return-object
-            label="Challenge category"
-            outlined
+            :error-messages="selectErrors"
+            @input="selectHandler"
           ></v-select>
           <v-textarea
             outlined
@@ -39,21 +41,21 @@
             :rules="validationRules.description"
           ></v-textarea>
           <v-text-field
-            label="Days timer"
             outlined
+            label="Days timer"
             type="number"
-            :rules="validationRules.dayTimerRules"
             v-model="number"
+            :rules="validationRules.dayTimerRules"
           ></v-text-field>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
           <v-btn color="primary" text @click="hideDialog"> Close</v-btn>
           <v-btn
-            color="primary"
             text
+            color="primary"
             @click="submitChallenge"
-            :disabled="!isValidCreatedChallenge"
+            :disabled="!isValid"
           >
             Submit
           </v-btn>
@@ -88,6 +90,8 @@ export default {
   },
   data() {
     return {
+      selectErrors: [],
+      isValid: false,
       promise: null,
       isDialogVisible: false,
       description: this.challenge?.description || '',
@@ -100,8 +104,8 @@ export default {
       promises: 'PROMISES',
       userData: 'USER_DATA',
     }),
-    isValidCreatedChallenge() {
-      return this.promise?.id && this.description?.length > 0;
+    isPromiseSelected() {
+      return this.promise?.id;
     },
     dialogTitle() {
       if (this.actionType === 'edit') {
@@ -123,36 +127,46 @@ export default {
     this.$store.dispatch('LOAD_PROMISES');
   },
   methods: {
+    selectHandler() {
+      this.selectErrors = [];
+    },
     hideDialog() {
       this.isDialogVisible = false;
-    },
-    submitChallenge() {
-      if (this.actionType === 'edit') {
-        let startTime = new Date(this.challenge.start_date);
-        startTime = new Date(
-          startTime.getTime() + startTime.getTimezoneOffset() * 60000
-        );
-
-        this.$store.dispatch('UPDATE_FULL_CHALLENGE', {
-          ...this.challenge,
-          start_date: new Date(Date.parse(startTime)),
-          promise_id: this.promise.id,
-          description: this.description,
-          days_number: this.number,
-          title: this.promise.title,
-        });
-      } else if (this.actionType === 'create') {
-        this.$store.dispatch('CREATE_FULL_CHALLENGE', {
-          user_id: this.userData.id,
-          promise_id: this.promise.id,
-          description: this.description,
-          start_date: new Date(Date.now()).toISOString(),
-          days_number: this.number,
-          title: this.promise.title,
-        });
+      if (this.actionType === 'create') {
         this.$refs.form.reset();
       }
-      this.hideDialog();
+    },
+    submitChallenge() {
+      if (this.isPromiseSelected) {
+        if (this.actionType === 'edit') {
+          let startTime = new Date(this.challenge.start_date);
+          startTime = new Date(
+            startTime.getTime() + startTime.getTimezoneOffset() * 60000
+          );
+
+          this.$store.dispatch('UPDATE_FULL_CHALLENGE', {
+            ...this.challenge,
+            start_date: new Date(Date.parse(startTime)),
+            promise_id: this.promise.id,
+            description: this.description,
+            days_number: this.number,
+            title: this.promise.title,
+          });
+        } else if (this.actionType === 'create') {
+          this.$store.dispatch('CREATE_FULL_CHALLENGE', {
+            user_id: this.userData.id,
+            promise_id: this.promise.id,
+            description: this.description,
+            start_date: new Date(Date.now()).toISOString(),
+            days_number: this.number,
+            title: this.promise.title,
+          });
+          this.$refs.form.reset();
+        }
+        this.hideDialog();
+      } else {
+        this.selectErrors.push('Invalid');
+      }
     },
   },
 };

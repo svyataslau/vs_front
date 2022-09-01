@@ -2,8 +2,8 @@ export default {
   nicknameRules: [
     (v: string) => !!v || 'Nickname is required',
     (v: string) =>
-      /^[a-z0-9](?:[-_.]?[a-z0-9])*$/.test(v) ||
-      'Nickname can contain lowercase letters, numbers, -_.',
+      /^[a-zA-Z0-9](?:[-_.]?[a-zA-Z0-9])*$/.test(v) ||
+      'Nickname can contain letters, numbers, -_.',
   ],
   emailRules: [
     (v: string) => !!v || 'Email is required',
@@ -19,11 +19,14 @@ export default {
   ],
   dayTimerRules: [(v: number) => v > 0 || 'Enter a positive number'],
   title: [
+    (v: string) => v?.length < 128 || 'You can enter up to 128 characters',
+    (v: string) => !!v || 'Title is required',
     (v: string) =>
-      v?.length < 128 || '\n' + 'You can enter up to 128 characters',
+      /^[a-zA-Z0-9](?:[-_.]?[a-zA-Z0-9])*$/.test(v) ||
+      'Title can contain letters, numbers, -_.',
   ],
   description: [
-    (v: string) =>
-      v?.length < 2048 || '\n' + 'You can enter up to 2048 characters',
+    (v: string) => v?.length < 2048 || 'You can enter up to 2048 characters',
+    (v: string) => !!v || 'Description is required',
   ],
 };

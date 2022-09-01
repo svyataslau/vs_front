@@ -72,6 +72,7 @@ export const actions: ActionTree<ProfileState, any> = {
     try {
       commit('SET_IS_AUTHORIZED', false);
       commit('SET_USER_DATA', {});
+      router.push('login');
     } catch (e) {
       dispatch(
         'CREATE_ALERT',

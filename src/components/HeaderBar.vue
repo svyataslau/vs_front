@@ -1,15 +1,14 @@
 <template>
-  <v-card color="grey darken-3" flat tile>
+  <v-card flat tile>
     <v-toolbar dense>
       <v-img
-        class="mx-2"
+        contain
         src="../assets/logo.png"
         max-height="40"
         max-width="40"
-        contain
+        class="mx-2"
       ></v-img>
       <v-toolbar-title>The Challenge</v-toolbar-title>
-
       <v-spacer></v-spacer>
       <span class="font-weight-bold">{{ userData.nickname }}</span>
       <v-toolbar-items>
@@ -33,7 +32,7 @@ export default {
   },
   methods: {
     signOut() {
-      this.$store.dispatch('LOGOUT').then(() => this.$router.push('login'));
+      this.$store.dispatch('LOGOUT');
     },
   },
 };

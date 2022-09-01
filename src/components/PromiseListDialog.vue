@@ -1,22 +1,22 @@
 <template>
-  <v-dialog v-model="isDialogVisible" scrollable max-width="500">
+  <v-dialog scrollable max-width="500" v-model="isDialogVisible">
     <template v-slot:activator="{ on, attrs }">
       <v-btn
-        class="mx-2"
         fab
         dark
         large
         v-blur
-        color="blue lighten-1"
+        class="mx-2"
+        color="primary"
         v-bind="attrs"
         v-on="on"
       >
-        <v-icon dark> mdi-clipboard-edit-outline</v-icon>
+        <v-icon dark>mdi-clipboard-edit-outline</v-icon>
       </v-btn>
     </template>
     <v-card>
       <v-card-title>Edit Promise Categories</v-card-title>
-      <v-sheet height="500" outlined class="overflow-auto">
+      <v-sheet outlined height="500" class="overflow-auto">
         <v-row justify="center" class="mt-4" no-gutters>
           <PromiseDialog :actionType="'create'">
             <v-icon>mdi-plus-thick</v-icon>
@@ -29,7 +29,7 @@
         />
       </v-sheet>
       <v-card-actions class="justify-end">
-        <v-btn color="primary" text @click="hideDialog">Close</v-btn>
+        <v-btn text color="primary" @click="hideDialog">Close</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

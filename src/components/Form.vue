@@ -1,43 +1,43 @@
 <template>
   <v-container fluid>
     <h1 class="text-h4">{{ title }}</h1>
-    <v-form ref="form" v-model="valid">
+    <v-form ref="form" v-model="isValid">
       <v-text-field
         v-if="isRegistrationPage"
+        required
         color="black"
+        label="Nickname"
         v-model="user.nickname"
         :rules="validationRules.nicknameRules"
-        label="Nickname"
-        required
       ></v-text-field>
 
       <v-text-field
+        required
+        label="Email"
         color="black"
         v-model="user.email"
         :rules="validationRules.emailRules"
-        label="Email"
-        required
       ></v-text-field>
 
       <v-text-field
+        required
+        label="Password"
         color="black"
         v-model="user.password"
         :rules="validationRules.passwordRules"
-        label="Password"
-        required
       ></v-text-field>
 
       <v-btn
-        :disabled="!valid"
-        color="blue lighten-1"
+        color="primary"
         class="mr-4 white--text"
+        :disabled="!isValid"
         @click="submit"
       >
         Submit
       </v-btn>
 
       <v-btn
-        color="pink lighten-1"
+        color="warning"
         class="mr-4 white--text"
         @click="$refs.form.reset()"
       >
@@ -57,7 +57,7 @@ export default Vue.extend({
     title: String,
   },
   data: () => ({
-    valid: true,
+    isValid: true,
     user: {
       nickname: '',
       email: 'letsgo763@gmail.com', //mocked
