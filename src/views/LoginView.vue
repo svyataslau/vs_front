@@ -9,19 +9,19 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import Form from '@/components/Form.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'LoginView',
   components: {
     Form,
   },
   computed: {
-    headingName() {
+    headingName(): string {
       return this.$route.name == 'login' ? 'Login' : 'Registration';
     },
-    redirectButtonName() {
+    redirectButtonName(): string {
       return this.$route.name == 'login' ? 'Registration page' : 'Login page';
     },
   },

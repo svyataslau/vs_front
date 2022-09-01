@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="isDialogVisible" scrollable max-width="500px">
+  <v-dialog v-model="isDialogVisible" scrollable max-width="500">
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         class="mx-2"
@@ -55,30 +55,30 @@ export default defineComponent({
       promiseList: [] as PromiseType[],
     };
   },
-  watch: {
-    promises: {
-      handler(newVal) {
-        if (newVal?.length) {
-          this.promiseList = [...newVal].reverse();
-        }
-      },
-      immediate: true,
-    },
-  },
   computed: {
     ...mapGetters({
       promises: 'PROMISES',
       userData: 'USER_DATA',
     }),
   },
+  watch: {
+    promises: {
+      handler(newPromises) {
+        if (newPromises?.length) {
+          this.promiseList = [...newPromises].reverse();
+        }
+      },
+      immediate: true,
+    },
+  },
+  mounted() {
+    this.$store.dispatch('LOAD_PROMISES');
+  },
   methods: {
     hideDialog() {
       this.isDialogVisible = false;
       this.$store.dispatch('REFRESH_USER_DATA');
     },
-  },
-  mounted() {
-    this.$store.dispatch('LOAD_PROMISES');
   },
 });
 </script>

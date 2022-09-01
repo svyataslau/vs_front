@@ -71,18 +71,18 @@ export default defineComponent({
       repeatIntervalIn: 1000,
     };
   },
+  watch: {
+    repeatIntervalIn() {
+      clearInterval(this.interval);
+      this.runInterval();
+    },
+  },
   created() {
     this.generateTimerObject();
     this.runInterval();
   },
   beforeDestroy() {
     clearInterval(this.interval);
-  },
-  watch: {
-    repeatIntervalIn() {
-      clearInterval(this.interval);
-      this.runInterval();
-    },
   },
   methods: {
     countProcent(): void {

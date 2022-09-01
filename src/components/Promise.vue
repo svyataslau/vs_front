@@ -39,13 +39,13 @@ interface PromiseType {
 
 export default defineComponent({
   name: 'Promise',
+  components: { ApproveDialog, PromiseDialog },
   props: {
     promise: {
       type: Object as PropType<PromiseType>,
       required: true,
     },
   },
-  components: { ApproveDialog, PromiseDialog },
   methods: {
     deleteCategory(): void {
       this.$store.dispatch('DELETE_PROMISE', this.promise);

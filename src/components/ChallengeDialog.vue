@@ -95,9 +95,6 @@ export default {
       validationRules,
     };
   },
-  mounted() {
-    this.$store.dispatch('LOAD_PROMISES');
-  },
   computed: {
     ...mapGetters({
       promises: 'PROMISES',
@@ -121,6 +118,9 @@ export default {
         (promise) => promise.id === this.challenge?.promise_id
       );
     },
+  },
+  mounted() {
+    this.$store.dispatch('LOAD_PROMISES');
   },
   methods: {
     hideDialog() {
