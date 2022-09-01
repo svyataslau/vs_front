@@ -18,6 +18,10 @@ export default {
       'Invalid password. The password must consist of uppercase and lowercase Latin letters and be at least 8 characters long!',
   ],
   dayTimerRules: [(v: number) => v > 0 || 'Enter a positive number'],
+  title: [
+    (v: string) =>
+      v?.length < 128 || '\n' + 'You can enter up to 128 characters',
+  ],
   description: [
     (v: string) =>
       v?.length < 2048 || '\n' + 'You can enter up to 2048 characters',

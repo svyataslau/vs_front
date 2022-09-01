@@ -1,16 +1,10 @@
 <template>
-  <v-card
-    class="my-4 d-flex flex-row col-12"
-    max-height="250"
-    elevation="2"
-    outlined
-    shaped
-  >
+  <v-card class="my-4 d-flex flex-row col-12" elevation="2" outlined shaped>
     <v-col cols="7" md="8" lg="9" class="pa-0">
-      <h5 class="text-h5 ma-4 text-truncate">
+      <h5 class="text-h5 my-4 text-truncate">
         {{ challenge.title }}
       </h5>
-      <h6 class="text-body-2 ma-4 challenge-description">
+      <h6 class="text-body-2 my-4 challenge-description">
         {{ challenge.description }}
       </h6>
     </v-col>
@@ -33,16 +27,12 @@
         <ChallengeDialog :challenge="challenge" :actionType="'edit'">
           <v-icon>mdi-pencil-outline</v-icon>
         </ChallengeDialog>
-        <v-btn
-          elevation="2"
-          icon
-          outlined
-          text
-          class="ma-2"
-          @click="deleteChallenge"
+        <ApproveDialog
+          @callback="deleteChallenge"
+          :message="'Would you like to delete this challenge?'"
         >
           <v-icon>mdi-delete-outline</v-icon>
-        </v-btn>
+        </ApproveDialog>
       </v-card-actions>
     </v-col>
   </v-card>
@@ -50,6 +40,7 @@
 
 <script lang="ts">
 import ChallengeDialog from '@/components/ChallengeDialog.vue';
+import ApproveDialog from '@/components/ApproveDialog.vue';
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
 
@@ -65,7 +56,7 @@ interface ChallengeType {
 
 export default defineComponent({
   name: 'Challenge',
-  components: { ChallengeDialog },
+  components: { ChallengeDialog, ApproveDialog },
   props: {
     challenge: {
       type: Object as PropType<ChallengeType>,

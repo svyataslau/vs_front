@@ -28,7 +28,7 @@
             :items="promises"
             item-text="title"
             return-object
-            label="Promise category"
+            label="Challenge category"
             outlined
           ></v-select>
           <v-textarea
@@ -52,8 +52,8 @@
           <v-btn
             color="primary"
             text
-            @click="submitPromise"
-            :disabled="!isValidCreatedPromise"
+            @click="submitChallenge"
+            :disabled="!isValidCreatedChallenge"
           >
             Submit
           </v-btn>
@@ -103,8 +103,8 @@ export default {
       promises: 'PROMISES',
       userData: 'USER_DATA',
     }),
-    isValidCreatedPromise() {
-      return this.promise?.id && this.description.length > 0;
+    isValidCreatedChallenge() {
+      return this.promise?.id && this.description?.length > 0;
     },
     dialogTitle() {
       if (this.actionType === 'edit') {
@@ -126,7 +126,7 @@ export default {
     hideDialog() {
       this.isDialogVisible = false;
     },
-    submitPromise() {
+    submitChallenge() {
       if (this.actionType === 'edit') {
         let startTime = new Date(this.challenge.start_date);
         startTime = new Date(

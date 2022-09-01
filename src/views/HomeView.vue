@@ -2,14 +2,19 @@
   <v-main>
     <HeaderBar />
     <v-row class="mt-2" no-gutters>
-      <v-col cols="12" md="6" class="mx-auto">
-        <v-row align="center" justify="space-between" class="px-11 mx-0 my-4">
-          <h4 class="text-h4">My Challenges</h4>
-          <ChallengeDialog large color="primary" :actionType="'create'">
-            <v-icon dark> mdi-plus-thick</v-icon>
-          </ChallengeDialog>
+      <v-col cols="12" sm="10" md="8" lg="6" class="mx-auto">
+        <v-row align="center" class="px-4 px-md-11 mx-0 my-4" no-gutters>
+          <v-col cols="12" md="6" class="text-center text-md-left my-4"
+            ><h4 class="text-h4">My Challenges</h4></v-col
+          >
+          <v-col cols="12" md="6" class="text-center text-md-end">
+            <ChallengeDialog large color="primary" :actionType="'create'">
+              <v-icon>mdi-plus-thick</v-icon>
+            </ChallengeDialog>
+            <PromiseListDialog v-if="isAdmin" class="ma-4" />
+          </v-col>
         </v-row>
-        <v-sheet class="ma-0 px-4 transparent" height="600">
+        <v-sheet class="ma-0 px-4 transparent" height="550">
           <Challenge
             v-for="fullChallengeOfUser in historyList"
             :key="fullChallengeOfUser.id"
@@ -25,12 +30,6 @@
           @input="updatePage"
         ></v-pagination>
       </v-col>
-      <v-col cols="12" md="6" v-if="$vuetify.breakpoint.mdAndUp && isAdmin">
-        <v-row align="center" justify="space-between" class="px-11 ma-0">
-          <h4 class="text-h4">Admin</h4>
-          <EditPromiseDialog class="ma-4" />
-        </v-row>
-      </v-col>
     </v-row>
   </v-main>
 </template>
@@ -39,7 +38,7 @@
 import { defineComponent } from 'vue';
 import HeaderBar from '@/components/HeaderBar.vue';
 import ChallengeDialog from '@/components/ChallengeDialog.vue';
-import EditPromiseDialog from '@/components/EditPromiseDialog.vue';
+import PromiseListDialog from '@/components/PromiseListDialog.vue';
 import Challenge from '@/components/Challenge.vue';
 import { mapGetters } from 'vuex';
 
@@ -55,7 +54,7 @@ interface ChallengeType {
 
 export default defineComponent({
   name: 'App',
-  components: { EditPromiseDialog, HeaderBar, Challenge, ChallengeDialog },
+  components: { PromiseListDialog, HeaderBar, Challenge, ChallengeDialog },
   data: () => {
     return {
       page: 1,
@@ -84,10 +83,11 @@ export default defineComponent({
   watch: {
     userData: {
       handler(newVal) {
-        console.log('watcher');
-        this.challenges = [...newVal.challenges].reverse();
-        this.initPage();
-        this.updatePage(this.page);
+        if (newVal.challenges?.length) {
+          this.challenges = [...newVal.challenges].reverse();
+          this.initPage();
+          this.updatePage(this.page);
+        }
       },
       immediate: true,
     },

@@ -20,6 +20,66 @@ export const mutations: MutationTree<PromiseState> = {
 };
 
 export const actions: ActionTree<PromiseState, any> = {
+  CREATE_PROMISE({ commit, dispatch }, payload) {
+    apiUrl
+      .post('/promises', payload)
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch('LOAD_PROMISES', {
+            root: true,
+          });
+        }
+      })
+      .catch((e) => {
+        dispatch(
+          'CREATE_ALERT',
+          { message: e.response.data.message },
+          {
+            root: true,
+          }
+        );
+      });
+  },
+  UPDATE_PROMISE({ commit, dispatch }, payload) {
+    apiUrl
+      .put(`/promises/${payload.id}`, payload)
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch('LOAD_PROMISES', {
+            root: true,
+          });
+        }
+      })
+      .catch((e) => {
+        dispatch(
+          'CREATE_ALERT',
+          { message: e.response.data.message },
+          {
+            root: true,
+          }
+        );
+      });
+  },
+  DELETE_PROMISE({ commit, dispatch }, payload) {
+    apiUrl
+      .delete(`/promises/${payload.id}`, payload)
+      .then((res) => {
+        if (res.status === 200) {
+          dispatch('LOAD_PROMISES', {
+            root: true,
+          });
+        }
+      })
+      .catch((e) => {
+        dispatch(
+          'CREATE_ALERT',
+          { message: e.response.data.message },
+          {
+            root: true,
+          }
+        );
+      });
+  },
   LOAD_PROMISES({ commit, dispatch }) {
     apiUrl
       .get('/promises')

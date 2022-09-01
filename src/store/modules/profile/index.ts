@@ -107,7 +107,7 @@ export const profile: Module<ProfileState, any> = {
   state: {
     isAuthorized: false,
     userData: {},
-    isAdmin: false,
+    isAdmin: true,
   },
   getters,
   mutations,

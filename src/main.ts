@@ -11,7 +11,7 @@ Vue.config.productionTip = false;
 
 Vue.directive('blur', {
   inserted: function (el) {
-    el.onfocus = (ev: any) => ev.target.blur();
+    el.onfocus = (ev: Event) => (ev.target as HTMLInputElement).blur();
   },
 });
 
