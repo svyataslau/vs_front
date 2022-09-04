@@ -44,7 +44,7 @@
             outlined
             label="Days timer"
             type="number"
-            v-model="number"
+            v-model="daysNumber"
             :rules="validationRules.dayTimerRules"
           ></v-text-field>
         </v-card-text>
@@ -100,7 +100,7 @@ export default defineComponent({
       promise: { id: 0, title: '' } as Promise,
       isDialogVisible: false,
       description: this.challenge.description || null,
-      number: this.challenge.days_number || null,
+      daysNumber: this.challenge.days_number || null,
       validationRules,
     };
   },
@@ -155,19 +155,19 @@ export default defineComponent({
           this.$store.dispatch('UPDATE_USER_CHALLENGE', {
             ...this.challenge,
             start_date: new Date(Date.parse(startTime.toString())),
-            promise_id: this.promise?.id,
+            promise_id: this.promise.id,
+            title: this.promise.title,
             description: this.description,
-            days_number: this.number,
-            title: this.promise?.title,
+            days_number: this.daysNumber,
           });
         } else if (this.actionType === 'create') {
           this.$store.dispatch('CREATE_USER_CHALLENGE', {
-            user_id: this.userData.id,
-            promise_id: this.promise?.id,
-            description: this.description,
             start_date: new Date(Date.now()).toISOString(),
-            days_number: this.number,
-            title: this.promise?.title,
+            user_id: this.userData.id,
+            promise_id: this.promise.id,
+            title: this.promise.title,
+            description: this.description,
+            days_number: this.daysNumber,
           });
         }
         this.hideDialog();

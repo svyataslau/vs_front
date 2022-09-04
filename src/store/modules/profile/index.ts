@@ -19,7 +19,7 @@ export const mutations: MutationTree<ProfileState> = {
 };
 
 export const actions: ActionTree<ProfileState, RootState> = {
-  REGISTER({ commit, dispatch }, { nickname, email, password }: User) {
+  REGISTER({ commit, dispatch }, { nickname, email, password }) {
     apiUrl
       .post('/users', { nickname, email, password })
       .then((res) => {
@@ -39,7 +39,7 @@ export const actions: ActionTree<ProfileState, RootState> = {
         );
       });
   },
-  LOGIN({ commit, dispatch }, { email, password }: User) {
+  LOGIN({ commit, dispatch }, { email, password }) {
     apiUrl
       .post('/users/login', {
         email,
