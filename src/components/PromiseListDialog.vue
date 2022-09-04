@@ -22,7 +22,7 @@
             <v-icon>mdi-plus-thick</v-icon>
           </PromiseDialog>
         </v-row>
-        <Promise
+        <PromiseItem
           v-for="promise in promiseList"
           :key="promise.id"
           :promise="promise"
@@ -39,20 +39,16 @@
 import { mapGetters } from 'vuex';
 import { defineComponent } from 'vue';
 import PromiseDialog from '@/components/PromiseDialog.vue';
-import Promise from '@/components/Promise.vue';
-
-interface PromiseType {
-  id: number;
-  title: string;
-}
+import PromiseItem from '@/components/PromiseItem.vue';
+import { Promise } from '@/store/types';
 
 export default defineComponent({
   name: 'PromiseListDialog',
-  components: { Promise, PromiseDialog },
+  components: { PromiseDialog, PromiseItem },
   data() {
     return {
       isDialogVisible: false,
-      promiseList: [] as PromiseType[],
+      promiseList: [] as Promise[],
     };
   },
   computed: {

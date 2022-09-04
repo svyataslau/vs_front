@@ -43,23 +43,14 @@ import ChallengeDialog from '@/components/ChallengeDialog.vue';
 import ApproveDialog from '@/components/ApproveDialog.vue';
 import { defineComponent } from 'vue';
 import type { PropType } from 'vue';
-
-interface ChallengeType {
-  id: number;
-  user_id: number;
-  promise_id: number;
-  start_date: string;
-  days_number: number;
-  title: string;
-  description: string;
-}
+import { UserChallenge } from '@/store/types';
 
 export default defineComponent({
   name: 'Challenge',
   components: { ChallengeDialog, ApproveDialog },
   props: {
     challenge: {
-      type: Object as PropType<ChallengeType>,
+      type: Object as PropType<UserChallenge>,
       required: true,
     },
   },

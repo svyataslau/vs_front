@@ -1,18 +1,9 @@
-import axios from 'axios';
 import router from '@/router';
 import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
+import { ProfileState, RootState } from '@/store/types';
+import { apiUrl } from '@/store/api';
 
-const apiUrl = axios.create({
-  baseURL: process.env.VUE_APP_API_DEFAULT_URL,
-});
-
-export interface ProfileState {
-  isAuthorized: boolean;
-  userData: object;
-  isAdmin: boolean;
-}
-
-export const getters: GetterTree<ProfileState, any> = {
+export const getters: GetterTree<ProfileState, RootState> = {
   IS_AUTHORIZED: (state) => state.isAuthorized,
   USER_DATA: (state) => state.userData,
   IS_ADMIN: (state) => state.isAdmin,
@@ -27,7 +18,7 @@ export const mutations: MutationTree<ProfileState> = {
   },
 };
 
-export const actions: ActionTree<ProfileState, any> = {
+export const actions: ActionTree<ProfileState, RootState> = {
   REGISTER({ commit, dispatch }, payload) {
     apiUrl
       .post('/users', payload)
@@ -104,7 +95,7 @@ export const actions: ActionTree<ProfileState, any> = {
   },
 };
 
-export const profile: Module<ProfileState, any> = {
+export const profile: Module<ProfileState, RootState> = {
   state: {
     isAuthorized: false,
     userData: {},

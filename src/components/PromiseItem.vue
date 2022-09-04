@@ -31,18 +31,14 @@
 import { defineComponent, PropType } from 'vue';
 import ApproveDialog from '@/components/ApproveDialog.vue';
 import PromiseDialog from '@/components/PromiseDialog.vue';
-
-interface PromiseType {
-  id: number;
-  title: string;
-}
+import { Promise } from '@/store/types';
 
 export default defineComponent({
-  name: 'Promise',
+  name: 'PromiseItem',
   components: { ApproveDialog, PromiseDialog },
   props: {
     promise: {
-      type: Object as PropType<PromiseType>,
+      type: Object as PropType<Promise>,
       required: true,
     },
   },
