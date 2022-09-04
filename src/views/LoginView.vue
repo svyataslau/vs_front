@@ -9,10 +9,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import Vue from 'vue';
 import Form from '@/components/Form.vue';
 
-export default defineComponent({
+export default Vue.extend({
   name: 'LoginView',
   components: {
     Form,

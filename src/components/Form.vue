@@ -48,10 +48,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import Vue from 'vue';
 import validationRules from '@/helpers/validationRules';
+import { User } from '@/store/types';
 
-export default defineComponent({
+export default Vue.extend({
   name: 'FormContent',
   props: {
     title: String,
@@ -63,7 +64,7 @@ export default defineComponent({
         nickname: '',
         email: 'letsgo763@gmail.com',
         password: 'somePass32',
-      },
+      } as User,
       validationRules,
     };
   },

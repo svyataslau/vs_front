@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex, { ActionTree, GetterTree, MutationTree } from 'vuex';
 
 import { profile } from '@/store/modules/profile';
-import { RootState, UserChallenge, Promise } from '@/store/types';
+import { RootState } from '@/store/types';
 import { apiUrl } from '@/store/api';
 
 Vue.use(Vuex);
@@ -14,22 +14,22 @@ export const getters: GetterTree<RootState, RootState> = {
 };
 
 export const mutations: MutationTree<RootState> = {
-  SET_ALERT(state, payload: object) {
+  SET_ALERT(state, payload) {
     state.alerts.push(payload);
     setTimeout(() => {
       state.alerts.shift();
     }, 5000);
   },
-  SET_USER_CHALLENGES(state, payload: UserChallenge[]) {
+  SET_USER_CHALLENGES(state, payload) {
     state.userChallenges = payload;
   },
-  SET_PROMISES(state, payload: Promise[]) {
+  SET_PROMISES(state, payload) {
     state.promises = payload;
   },
 };
 
 export const actions: ActionTree<RootState, RootState> = {
-  CREATE_ALERT({ commit }, payload: object) {
+  CREATE_ALERT({ commit }, payload) {
     commit('SET_ALERT', payload);
   },
   CREATE_USER_CHALLENGE({ dispatch }, payload) {

@@ -1,6 +1,6 @@
 import router from '@/router';
 import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
-import { ProfileState, RootState, User } from '@/store/types';
+import { ProfileState, RootState } from '@/store/types';
 import { apiUrl } from '@/store/api';
 
 export const getters: GetterTree<ProfileState, RootState> = {
@@ -10,10 +10,10 @@ export const getters: GetterTree<ProfileState, RootState> = {
 };
 
 export const mutations: MutationTree<ProfileState> = {
-  SET_IS_AUTHORIZED(state, payload: boolean) {
+  SET_IS_AUTHORIZED(state, payload) {
     state.isAuthorized = payload;
   },
-  SET_USER_DATA(state, payload: object) {
+  SET_USER_DATA(state, payload) {
     state.userData = payload;
   },
 };

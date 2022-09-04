@@ -10,12 +10,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
+import { Alert } from '@/store/types';
 
 export default defineComponent({
   name: 'CustomAlert',
   props: {
     alert: {
-      type: Object,
+      type: Object as PropType<Alert>,
       required: true,
     },
   },

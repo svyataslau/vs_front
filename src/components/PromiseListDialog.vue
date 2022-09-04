@@ -36,13 +36,13 @@
 </template>
 
 <script lang="ts">
+import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
-import { defineComponent } from 'vue';
 import PromiseDialog from '@/components/PromiseDialog.vue';
 import PromiseItem from '@/components/PromiseItem.vue';
 import { Promise } from '@/store/types';
 
-export default defineComponent({
+export default Vue.extend({
   name: 'PromiseListDialog',
   components: { PromiseDialog, PromiseItem },
   data() {

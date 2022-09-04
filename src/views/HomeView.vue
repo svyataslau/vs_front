@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import Vue from 'vue';
 import HeaderBar from '@/components/HeaderBar.vue';
 import ChallengeDialog from '@/components/ChallengeDialog.vue';
 import PromiseListDialog from '@/components/PromiseListDialog.vue';
@@ -70,7 +70,7 @@ import Challenge from '@/components/Challenge.vue';
 import { mapGetters } from 'vuex';
 import { UserChallenge } from '@/store/types';
 
-export default defineComponent({
+export default Vue.extend({
   name: 'App',
   components: { PromiseListDialog, HeaderBar, Challenge, ChallengeDialog },
   data: () => {
