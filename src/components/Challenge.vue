@@ -13,10 +13,10 @@
         :rotate="-90"
         :size="100"
         :width="10"
-        :value="procent"
+        :value="progressPercent"
         color="primary"
       >
-        <v-icon x-large color="primary" v-if="procent >= 100">
+        <v-icon x-large color="primary" v-if="progressPercent >= 100">
           mdi-check-bold
         </v-icon>
         <span v-else class="text-body-2">{{ progressMessage }}</span>
@@ -43,6 +43,10 @@ import { defineComponent, PropType } from 'vue';
 import ChallengeDialog from '@/components/ChallengeDialog.vue';
 import ApproveDialog from '@/components/ApproveDialog.vue';
 import { UserChallenge } from '@/store/types';
+import {
+  calculatePercentOfСhallenge,
+  generateTimerObject,
+} from '@/helpers/time';
 
 export default defineComponent({
   name: 'Challenge',
@@ -56,7 +60,7 @@ export default defineComponent({
   data() {
     return {
       intervalId: 0,
-      procent: 0,
+      progressPercent: 0,
       progressMessage: '',
       repeatIntervalIn: 1000,
     };
@@ -75,68 +79,25 @@ export default defineComponent({
     clearInterval(this.intervalId);
   },
   methods: {
-    countProcent(): void {
-      const oneDayInMiliseconds = 86400000;
-      const daysNumberInMiliseconds =
-        this.challenge.days_number * oneDayInMiliseconds;
-      let startTime = new Date(this.challenge.start_date);
-      startTime = new Date(
-        startTime.getTime() + startTime.getTimezoneOffset() * 60000
-      );
-      const pastMiliseconds = Date.now() - Date.parse(startTime.toString());
-      this.procent = (pastMiliseconds / daysNumberInMiliseconds) * 100;
+    calculatePercent(): void {
+      this.progresProcent = calculatePercentOfСhallenge(this.challenge);
     },
 
     runInterval(): void {
       this.intervalId = setInterval(() => {
         this.generateTimerObject();
-        if (this.procent >= 100) {
+        if (this.progressPercent >= 100) {
           clearInterval(this.intervalId);
         }
       }, this.repeatIntervalIn);
     },
 
     generateTimerObject(): void {
-      const oneDayInMiliseconds = 86400000;
-      const oneHourInMiliseconds = 3600000;
-      const oneMinuteInMiliseconds = 60000;
-      const oneSecondInMiliseconds = 1000;
-      let startTime = new Date(this.challenge.start_date);
-      startTime = new Date(
-        startTime.getTime() + startTime.getTimezoneOffset() * 60000
-      );
-      const pastMiliseconds = Date.now() - Date.parse(startTime.toString());
-      const countDays = Math.trunc(pastMiliseconds / oneDayInMiliseconds);
-      const countHours = Math.trunc(pastMiliseconds / oneHourInMiliseconds);
-      const countMinutes = Math.trunc(pastMiliseconds / oneMinuteInMiliseconds);
-      const countSeconds = Math.trunc(pastMiliseconds / oneSecondInMiliseconds);
-      const timeArray = [
-        {
-          days: countDays,
-          description: () => (countDays > 1 ? 'days' : 'day'),
-          repeatIntervalIn: oneDayInMiliseconds,
-        },
-        {
-          days: countHours,
-          description: () => (countHours > 1 ? 'hours' : 'hour'),
-          repeatIntervalIn: oneHourInMiliseconds,
-        },
-        {
-          days: countMinutes,
-          description: () => (countMinutes > 1 ? 'minutes' : 'minute'),
-          repeatIntervalIn: oneMinuteInMiliseconds,
-        },
-        {
-          days: countSeconds,
-          description: () => (countSeconds > 1 ? 'seconds' : 'second'),
-          repeatIntervalIn: oneSecondInMiliseconds,
-        },
-      ];
-      const founded = timeArray.find((element) => element.days > 0);
-      if (founded) {
-        this.progressMessage = `${founded.days} ${founded.description()}`;
-        this.repeatIntervalIn = founded.repeatIntervalIn;
-        this.countProcent();
+      const timer = generateTimerObject(this.challenge.start_date);
+      if (timer) {
+        this.progressMessage = timer.progressMessage;
+        this.repeatIntervalIn = timer.repeatIntervalIn;
+        this.calculatePercent();
       }
     },
 

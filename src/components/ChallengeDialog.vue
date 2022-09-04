@@ -31,7 +31,7 @@
             v-model="promise"
             :items="promises"
             :error-messages="selectErrors"
-            @input="selectHandler"
+            @input="resetSelectErrors"
           ></v-select>
           <v-textarea
             outlined
@@ -54,7 +54,7 @@
           <v-btn
             text
             color="primary"
-            @click="submitChallenge"
+            @click="checkPromiseSelection"
             :disabled="!isValid"
           >
             Submit
@@ -67,9 +67,10 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue';
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import validationRules from '@/helpers/validationRules';
 import { UserChallenge, Promise } from '@/store/types';
+import { adaptDateToServer, convertMsToIsoString } from '@/helpers/time';
 
 export default defineComponent({
   name: 'ChallengeDialog',
@@ -132,10 +133,14 @@ export default defineComponent({
     this.$store.dispatch('LOAD_PROMISES');
   },
   methods: {
+    ...mapActions({
+      updateUserChallenge: 'UPDATE_USER_CHALLENGE',
+      createUserChallenge: 'CREATE_USER_CHALLENGE',
+    }),
     resetForm() {
       (this.$refs.form as HTMLFormElement).reset();
     },
-    selectHandler() {
+    resetSelectErrors() {
       this.selectErrors = [];
     },
     hideDialog() {
@@ -144,36 +149,36 @@ export default defineComponent({
       }
       this.isDialogVisible = false;
     },
-    submitChallenge() {
+    checkPromiseSelection() {
       if (this.promise?.id) {
-        if (this.actionType === 'edit') {
-          let startTime = new Date(this.challenge.start_date);
-          startTime = new Date(
-            startTime.getTime() + startTime.getTimezoneOffset() * 60000
-          );
-
-          this.$store.dispatch('UPDATE_USER_CHALLENGE', {
-            ...this.challenge,
-            start_date: new Date(Date.parse(startTime.toString())),
-            promise_id: this.promise.id,
-            title: this.promise.title,
-            description: this.description,
-            days_number: this.daysNumber,
-          });
-        } else if (this.actionType === 'create') {
-          this.$store.dispatch('CREATE_USER_CHALLENGE', {
-            start_date: new Date(Date.now()).toISOString(),
-            user_id: this.userData.id,
-            promise_id: this.promise.id,
-            title: this.promise.title,
-            description: this.description,
-            days_number: this.daysNumber,
-          });
-        }
-        this.hideDialog();
+        this.submitChallenge();
       } else {
         this.selectErrors.push('Choose a promise!');
       }
+    },
+    submitChallenge() {
+      const generalFields = {
+        promise_id: this.promise.id,
+        title: this.promise.title,
+        description: this.description,
+        days_number: this.daysNumber,
+      };
+
+      if (this.actionType === 'edit') {
+        this.updateUserChallenge({
+          ...this.challenge,
+          ...generalFields,
+          start_date: adaptDateToServer(this.challenge.start_date),
+        });
+      } else if (this.actionType === 'create') {
+        this.createUserChallenge({
+          start_date: convertMsToIsoString(Date.now()),
+          ...generalFields,
+          user_id: this.userData.id,
+        });
+      }
+
+      this.hideDialog();
     },
   },
 });
