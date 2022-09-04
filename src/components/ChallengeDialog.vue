@@ -65,11 +65,13 @@
   </v-dialog>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
 import { mapGetters } from 'vuex';
 import validationRules from '@/helpers/validationRules';
+import { UserChallenge, Promise } from '@/store/types';
 
-export default {
+export default defineComponent({
   name: 'ChallengeDialog',
   props: {
     isLarge: {
@@ -81,7 +83,10 @@ export default {
       default: 'textSecondaryColor',
     },
     challenge: {
-      type: Object,
+      type: Object as PropType<UserChallenge>,
+      default() {
+        return {};
+      },
     },
     actionType: {
       type: String,
@@ -90,12 +95,12 @@ export default {
   },
   data() {
     return {
-      selectErrors: [],
+      selectErrors: [] as string[],
       isValid: false,
-      promise: null,
+      promise: { id: 0, title: '' } as Promise,
       isDialogVisible: false,
-      description: this.challenge?.description || '',
-      number: this.challenge?.days_number || null,
+      description: this.challenge.description || null,
+      number: this.challenge.days_number || null,
       validationRules,
     };
   },
@@ -104,9 +109,6 @@ export default {
       promises: 'PROMISES',
       userData: 'USER_DATA',
     }),
-    isPromiseSelected() {
-      return this.promise?.id;
-    },
     dialogTitle() {
       if (this.actionType === 'edit') {
         return 'Edit a challenge';
@@ -115,7 +117,7 @@ export default {
       }
       return '';
     },
-    responsiveDialogWidth() {
+    responsiveDialogWidth(): number {
       return this.$vuetify.breakpoint.mdAndUp ? 800 : 300;
     },
   },
@@ -130,17 +132,20 @@ export default {
     this.$store.dispatch('LOAD_PROMISES');
   },
   methods: {
+    resetForm() {
+      (this.$refs.form as HTMLFormElement).reset();
+    },
     selectHandler() {
       this.selectErrors = [];
     },
     hideDialog() {
-      this.isDialogVisible = false;
       if (this.actionType === 'create') {
-        this.$refs.form.reset();
+        this.resetForm();
       }
+      this.isDialogVisible = false;
     },
     submitChallenge() {
-      if (this.isPromiseSelected) {
+      if (this.promise?.id) {
         if (this.actionType === 'edit') {
           let startTime = new Date(this.challenge.start_date);
           startTime = new Date(
@@ -149,28 +154,27 @@ export default {
 
           this.$store.dispatch('UPDATE_USER_CHALLENGE', {
             ...this.challenge,
-            start_date: new Date(Date.parse(startTime)),
-            promise_id: this.promise.id,
+            start_date: new Date(Date.parse(startTime.toString())),
+            promise_id: this.promise?.id,
             description: this.description,
             days_number: this.number,
-            title: this.promise.title,
+            title: this.promise?.title,
           });
         } else if (this.actionType === 'create') {
           this.$store.dispatch('CREATE_USER_CHALLENGE', {
             user_id: this.userData.id,
-            promise_id: this.promise.id,
+            promise_id: this.promise?.id,
             description: this.description,
             start_date: new Date(Date.now()).toISOString(),
             days_number: this.number,
-            title: this.promise.title,
+            title: this.promise?.title,
           });
-          this.$refs.form.reset();
         }
         this.hideDialog();
       } else {
-        this.selectErrors.push('Invalid');
+        this.selectErrors.push('Choose a promise!');
       }
     },
   },
-};
+});
 </script>

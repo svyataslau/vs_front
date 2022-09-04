@@ -20,10 +20,11 @@
   </v-card>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 
-export default {
+export default defineComponent({
   name: 'HeaderBar',
   computed: {
     ...mapGetters({
@@ -35,7 +36,7 @@ export default {
       signOut: 'LOGOUT',
     }),
   },
-};
+});
 </script>
 
 <style scoped></style>

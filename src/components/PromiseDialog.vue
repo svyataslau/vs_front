@@ -47,11 +47,13 @@
   </v-dialog>
 </template>
 
-<script>
-import validationRules from '@/helpers/validationRules';
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
 import { mapActions } from 'vuex';
+import validationRules from '@/helpers/validationRules';
+import { Promise } from '@/store/types';
 
-export default {
+export default defineComponent({
   name: 'PromiseDialog',
   props: {
     isLarge: {
@@ -63,7 +65,10 @@ export default {
       default: 'textSecondaryColor',
     },
     promise: {
-      type: Object,
+      type: Object as PropType<Promise>,
+      default() {
+        return {};
+      },
     },
     actionType: {
       type: String,
@@ -74,12 +79,12 @@ export default {
     return {
       isValid: false,
       isDialogVisible: false,
-      title: this.promise?.title || '',
+      title: this.promise.title || null,
       validationRules,
     };
   },
   computed: {
-    dialogTitle() {
+    dialogTitle(): string {
       if (this.actionType === 'edit') {
         return 'Edit a promise';
       } else if (this.actionType === 'create') {
@@ -87,7 +92,7 @@ export default {
       }
       return '';
     },
-    responsiveDialogWidth() {
+    responsiveDialogWidth(): number {
       return this.$vuetify.breakpoint.mdAndUp ? 800 : 400;
     },
   },
@@ -96,7 +101,13 @@ export default {
       updatePromise: 'UPDATE_PROMISE',
       createPromise: 'CREATE_PROMISE',
     }),
+    resetForm() {
+      (this.$refs.form as HTMLFormElement).reset();
+    },
     hideDialog() {
+      if (this.actionType === 'create') {
+        this.resetForm();
+      }
       this.isDialogVisible = false;
     },
     submitPromise() {
@@ -109,10 +120,9 @@ export default {
         this.createPromise({
           title: this.title,
         });
-        this.$refs.form.reset();
       }
       this.hideDialog();
     },
   },
-};
+});
 </script>

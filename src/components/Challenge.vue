@@ -39,10 +39,9 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType } from 'vue';
 import ChallengeDialog from '@/components/ChallengeDialog.vue';
 import ApproveDialog from '@/components/ApproveDialog.vue';
-import { defineComponent } from 'vue';
-import type { PropType } from 'vue';
 import { UserChallenge } from '@/store/types';
 
 export default defineComponent({

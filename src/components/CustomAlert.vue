@@ -8,8 +8,10 @@
   </v-snackbar>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: 'CustomAlert',
   props: {
     alert: {
@@ -22,5 +24,5 @@ export default {
       isVisible: true,
     };
   },
-};
+});
 </script>

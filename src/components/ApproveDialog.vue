@@ -30,8 +30,10 @@
   </v-dialog>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: 'ApproveDialog',
   props: {
     isLarge: {
@@ -53,10 +55,10 @@ export default {
     };
   },
   computed: {
-    responsiveText() {
+    responsiveText(): string {
       return this.$vuetify.breakpoint.mdAndUp ? 'text-h6' : 'text-body-1';
     },
-    responsiveDialogWidth() {
+    responsiveDialogWidth(): number {
       return this.$vuetify.breakpoint.mdAndUp ? 600 : 400;
     },
   },
@@ -69,5 +71,5 @@ export default {
       this.hideDialog();
     },
   },
-};
+});
 </script>
