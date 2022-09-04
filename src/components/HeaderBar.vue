@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'HeaderBar',
@@ -31,9 +31,9 @@ export default {
     }),
   },
   methods: {
-    signOut() {
-      this.$store.dispatch('LOGOUT');
-    },
+    ...mapActions({
+      signOut: 'LOGOUT',
+    }),
   },
 };
 </script>

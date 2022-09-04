@@ -17,7 +17,7 @@
           <v-icon>mdi-pencil-outline</v-icon>
         </PromiseDialog>
         <ApproveDialog
-          :message="'Would you like to delete this category?'"
+          message="Would you like to delete this category?"
           @callback="deletePromise"
         >
           <v-icon>mdi-delete-outline</v-icon>

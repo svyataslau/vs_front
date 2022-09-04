@@ -29,7 +29,7 @@
         </ChallengeDialog>
         <ApproveDialog
           @callback="deleteChallenge"
-          :message="'Would you like to delete this challenge?'"
+          message="Would you like to delete this challenge?"
         >
           <v-icon>mdi-delete-outline</v-icon>
         </ApproveDialog>
@@ -56,7 +56,7 @@ export default defineComponent({
   },
   data() {
     return {
-      interval: 0,
+      intervalId: 0,
       procent: 0,
       progressMessage: '',
       repeatIntervalIn: 1000,
@@ -64,7 +64,7 @@ export default defineComponent({
   },
   watch: {
     repeatIntervalIn() {
-      clearInterval(this.interval);
+      clearInterval(this.intervalId);
       this.runInterval();
     },
   },
@@ -73,7 +73,7 @@ export default defineComponent({
     this.runInterval();
   },
   beforeDestroy() {
-    clearInterval(this.interval);
+    clearInterval(this.intervalId);
   },
   methods: {
     countProcent(): void {
@@ -89,10 +89,10 @@ export default defineComponent({
     },
 
     runInterval(): void {
-      this.interval = setInterval(() => {
+      this.intervalId = setInterval(() => {
         this.generateTimerObject();
         if (this.procent >= 100) {
-          clearInterval(this.interval);
+          clearInterval(this.intervalId);
         }
       }, this.repeatIntervalIn);
     },

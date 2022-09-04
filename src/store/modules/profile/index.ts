@@ -1,6 +1,6 @@
 import router from '@/router';
 import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
-import { ProfileState, RootState } from '@/store/types';
+import { ProfileState, RootState, User } from '@/store/types';
 import { apiUrl } from '@/store/api';
 
 export const getters: GetterTree<ProfileState, RootState> = {
@@ -19,9 +19,9 @@ export const mutations: MutationTree<ProfileState> = {
 };
 
 export const actions: ActionTree<ProfileState, RootState> = {
-  REGISTER({ commit, dispatch }, payload) {
+  REGISTER({ commit, dispatch }, { nickname, email, password }: User) {
     apiUrl
-      .post('/users', payload)
+      .post('/users', { nickname, email, password })
       .then((res) => {
         if (res.status === 201) {
           commit('SET_IS_AUTHORIZED', true);
@@ -39,9 +39,12 @@ export const actions: ActionTree<ProfileState, RootState> = {
         );
       });
   },
-  LOGIN({ commit, dispatch }, payload) {
+  LOGIN({ commit, dispatch }, { email, password }: User) {
     apiUrl
-      .post('/users/login', payload)
+      .post('/users/login', {
+        email,
+        password,
+      })
       .then((res) => {
         if (res.status === 200) {
           commit('SET_IS_AUTHORIZED', true);

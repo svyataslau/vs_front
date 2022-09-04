@@ -49,6 +49,7 @@
 
 <script>
 import validationRules from '@/helpers/validationRules';
+import { mapActions } from 'vuex';
 
 export default {
   name: 'PromiseDialog',
@@ -91,17 +92,21 @@ export default {
     },
   },
   methods: {
+    ...mapActions({
+      updatePromise: 'UPDATE_PROMISE',
+      createPromise: 'CREATE_PROMISE',
+    }),
     hideDialog() {
       this.isDialogVisible = false;
     },
     submitPromise() {
       if (this.actionType === 'edit') {
-        this.$store.dispatch('UPDATE_PROMISE', {
+        this.updatePromise({
           ...this.promise,
           title: this.title,
         });
       } else if (this.actionType === 'create') {
-        this.$store.dispatch('CREATE_PROMISE', {
+        this.createPromise({
           title: this.title,
         });
         this.$refs.form.reset();

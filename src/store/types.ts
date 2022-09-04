@@ -24,3 +24,9 @@ export interface Promise {
   id: number;
   title: string;
 }
+
+export interface User {
+  nickname: string;
+  email: string;
+  password: string;
+}

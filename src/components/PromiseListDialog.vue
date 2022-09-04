@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import { defineComponent } from 'vue';
 import PromiseDialog from '@/components/PromiseDialog.vue';
 import PromiseItem from '@/components/PromiseItem.vue';
@@ -68,12 +68,16 @@ export default defineComponent({
     },
   },
   mounted() {
-    this.$store.dispatch('LOAD_PROMISES');
+    this.loadPromises();
   },
   methods: {
+    ...mapActions({
+      loadPromises: 'LOAD_PROMISES',
+      refreshUserData: 'REFRESH_USER_DATA',
+    }),
     hideDialog() {
       this.isDialogVisible = false;
-      this.$store.dispatch('REFRESH_USER_DATA');
+      this.refreshUserData();
     },
   },
 });

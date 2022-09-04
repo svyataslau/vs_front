@@ -48,10 +48,10 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import validationRules from '@/helpers/validationRules';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'FormContent',
   props: {
     title: String,
@@ -61,8 +61,8 @@ export default Vue.extend({
       isValid: true,
       user: {
         nickname: '',
-        email: 'letsgo763@gmail.com', //mocked
-        password: 'somePass32', //mocked
+        email: 'letsgo763@gmail.com',
+        password: 'somePass32',
       },
       validationRules,
     };
@@ -75,17 +75,10 @@ export default Vue.extend({
   methods: {
     submit() {
       if (this.$route.name === 'login') {
-        this.$store.dispatch('LOGIN', {
-          email: this.user.email,
-          password: this.user.password,
-        });
+        this.$store.dispatch('LOGIN', this.user);
       }
       if (this.$route.name === 'registration') {
-        this.$store.dispatch('REGISTER', {
-          nickname: this.user.nickname,
-          email: this.user.email,
-          password: this.user.password,
-        });
+        this.$store.dispatch('REGISTER', this.user);
       }
     },
   },
