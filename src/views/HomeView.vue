@@ -8,7 +8,7 @@
             ><h4 class="text-h4">My Challenges</h4></v-col
           >
           <v-col cols="12" md="6" class="text-center text-md-end">
-            <ChallengeDialog large color="primary" :actionType="'create'">
+            <ChallengeDialog isLarge color="primary" :actionType="'create'">
               <v-icon>mdi-plus-thick</v-icon>
             </ChallengeDialog>
             <PromiseListDialog v-if="isAdmin" class="ma-4" />
@@ -41,16 +41,7 @@ import ChallengeDialog from '@/components/ChallengeDialog.vue';
 import PromiseListDialog from '@/components/PromiseListDialog.vue';
 import Challenge from '@/components/Challenge.vue';
 import { mapGetters } from 'vuex';
-
-interface ChallengeType {
-  id: number;
-  user_id: number;
-  promise_id: number;
-  start_date: string;
-  days_number: number;
-  title: string;
-  description: string;
-}
+import { UserChallenge } from '@/store/types';
 
 export default defineComponent({
   name: 'App',
@@ -59,9 +50,9 @@ export default defineComponent({
     return {
       page: 1,
       pageSize: 3,
-      pageChallengeList: [] as ChallengeType[],
+      pageChallengeList: [] as UserChallenge[],
       isOverlayVisible: false,
-      challenges: [] as ChallengeType[],
+      challenges: [] as UserChallenge[],
     };
   },
   computed: {

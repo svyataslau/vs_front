@@ -142,7 +142,7 @@ export default defineComponent({
     },
 
     deleteChallenge(): void {
-      this.$store.dispatch('DELETE_FULL_CHALLENGE', this.challenge);
+      this.$store.dispatch('DELETE_USER_CHALLENGE', this.challenge);
     },
   },
 });

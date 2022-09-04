@@ -17,8 +17,10 @@ export default {
       required: true,
     },
   },
-  data: () => ({
-    isVisible: true,
-  }),
+  data() {
+    return {
+      isVisible: true,
+    };
+  },
 };
 </script>

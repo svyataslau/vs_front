@@ -2,7 +2,7 @@
   <v-dialog
     scrollable
     v-model="isDialogVisible"
-    :max-width="$vuetify.breakpoint.mdAndUp ? 800 : 400"
+    :max-width="responsiveDialogWidth"
   >
     <template v-slot:activator="{ on, attrs }">
       <v-btn
@@ -11,8 +11,8 @@
         v-bind="attrs"
         v-on="on"
         :color="color"
-        :small="!large"
-        :large="large"
+        :small="!isLarge"
+        :large="isLarge"
       >
         <slot></slot>
       </v-btn>
@@ -53,7 +53,7 @@ import validationRules from '@/helpers/validationRules';
 export default {
   name: 'PromiseDialog',
   props: {
-    large: {
+    isLarge: {
       type: Boolean,
       default: false,
     },
@@ -85,6 +85,9 @@ export default {
         return 'Create a promise';
       }
       return '';
+    },
+    responsiveDialogWidth() {
+      return this.$vuetify.breakpoint.mdAndUp ? 800 : 400;
     },
   },
   methods: {

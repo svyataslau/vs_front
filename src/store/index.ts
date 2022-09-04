@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Vuex, { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
+import Vuex, { ActionTree, GetterTree, MutationTree } from 'vuex';
 
 import { profile } from '@/store/modules/profile';
 import { RootState, UserChallenge, Promise } from '@/store/types';
@@ -32,7 +32,7 @@ export const actions: ActionTree<RootState, RootState> = {
   CREATE_ALERT({ commit }, payload: object) {
     commit('SET_ALERT', payload);
   },
-  CREATE_FULL_CHALLENGE({ commit, dispatch }, payload) {
+  CREATE_USER_CHALLENGE({ dispatch }, payload) {
     apiUrl
       .post('/challenges', payload)
       .then((res) => {
@@ -52,7 +52,7 @@ export const actions: ActionTree<RootState, RootState> = {
         );
       });
   },
-  UPDATE_FULL_CHALLENGE({ commit, dispatch }, payload) {
+  UPDATE_USER_CHALLENGE({ dispatch }, payload) {
     apiUrl
       .put(`/challenges/${payload.id}`, payload)
       .then((res) => {
@@ -72,7 +72,7 @@ export const actions: ActionTree<RootState, RootState> = {
         );
       });
   },
-  DELETE_FULL_CHALLENGE({ commit, dispatch }, payload) {
+  DELETE_USER_CHALLENGE({ dispatch }, payload) {
     apiUrl
       .delete(`/challenges/${payload.id}`, payload)
       .then((res) => {
@@ -92,7 +92,7 @@ export const actions: ActionTree<RootState, RootState> = {
         );
       });
   },
-  CREATE_PROMISE({ commit, dispatch }, payload) {
+  CREATE_PROMISE({ dispatch }, payload) {
     apiUrl
       .post('/promises', payload)
       .then((res) => {
@@ -112,7 +112,7 @@ export const actions: ActionTree<RootState, RootState> = {
         );
       });
   },
-  UPDATE_PROMISE({ commit, dispatch }, payload) {
+  UPDATE_PROMISE({ dispatch }, payload) {
     apiUrl
       .put(`/promises/${payload.id}`, payload)
       .then((res) => {
@@ -132,7 +132,7 @@ export const actions: ActionTree<RootState, RootState> = {
         );
       });
   },
-  DELETE_PROMISE({ commit, dispatch }, payload) {
+  DELETE_PROMISE({ dispatch }, payload) {
     apiUrl
       .delete(`/promises/${payload.id}`, payload)
       .then((res) => {

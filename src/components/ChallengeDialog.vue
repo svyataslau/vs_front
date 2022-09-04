@@ -2,15 +2,15 @@
   <v-dialog
     v-model="isDialogVisible"
     scrollable
-    :max-width="$vuetify.breakpoint.mdAndUp ? 800 : 300"
+    :max-width="responsiveDialogWidth"
   >
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         fab
         v-blur
         :color="color"
-        :small="!large"
-        :large="large"
+        :small="!isLarge"
+        :large="isLarge"
         v-bind="attrs"
         v-on="on"
       >
@@ -72,7 +72,7 @@ import validationRules from '@/helpers/validationRules';
 export default {
   name: 'ChallengeDialog',
   props: {
-    large: {
+    isLarge: {
       type: Boolean,
       default: false,
     },
@@ -115,6 +115,9 @@ export default {
       }
       return '';
     },
+    responsiveDialogWidth() {
+      return this.$vuetify.breakpoint.mdAndUp ? 800 : 300;
+    },
   },
   watch: {
     promises() {
@@ -144,7 +147,7 @@ export default {
             startTime.getTime() + startTime.getTimezoneOffset() * 60000
           );
 
-          this.$store.dispatch('UPDATE_FULL_CHALLENGE', {
+          this.$store.dispatch('UPDATE_USER_CHALLENGE', {
             ...this.challenge,
             start_date: new Date(Date.parse(startTime)),
             promise_id: this.promise.id,
@@ -153,7 +156,7 @@ export default {
             title: this.promise.title,
           });
         } else if (this.actionType === 'create') {
-          this.$store.dispatch('CREATE_FULL_CHALLENGE', {
+          this.$store.dispatch('CREATE_USER_CHALLENGE', {
             user_id: this.userData.id,
             promise_id: this.promise.id,
             description: this.description,

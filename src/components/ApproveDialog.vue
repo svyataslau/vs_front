@@ -2,14 +2,14 @@
   <v-dialog
     v-model="isDialogVisible"
     scrollable
-    :max-width="$vuetify.breakpoint.mdAndUp ? 600 : 400"
+    :max-width="responsiveDialogWidth"
   >
     <template v-slot:activator="{ on, attrs }">
       <v-btn
         fab
         :color="color"
-        :small="!large"
-        :large="large"
+        :small="!isLarge"
+        :large="isLarge"
         v-bind="attrs"
         v-on="on"
         v-blur
@@ -19,9 +19,7 @@
       </v-btn>
     </template>
     <v-card>
-      <v-card-title
-        class="justify-center text-break"
-        :class="$vuetify.breakpoint.mdAndUp ? 'text-h6' : 'text-body-1'"
+      <v-card-title class="justify-center text-break" :class="responsiveText"
         >{{ message }}
       </v-card-title>
       <v-card-actions class="justify-space-between">
@@ -36,7 +34,7 @@
 export default {
   name: 'ApproveDialog',
   props: {
-    large: {
+    isLarge: {
       type: Boolean,
       default: false,
     },
@@ -53,6 +51,14 @@ export default {
     return {
       isDialogVisible: false,
     };
+  },
+  computed: {
+    responsiveText() {
+      return this.$vuetify.breakpoint.mdAndUp ? 'text-h6' : 'text-body-1';
+    },
+    responsiveDialogWidth() {
+      return this.$vuetify.breakpoint.mdAndUp ? 600 : 400;
+    },
   },
   methods: {
     hideDialog() {

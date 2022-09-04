@@ -56,15 +56,17 @@ export default Vue.extend({
   props: {
     title: String,
   },
-  data: () => ({
-    isValid: true,
-    user: {
-      nickname: '',
-      email: 'letsgo763@gmail.com', //mocked
-      password: 'somePass32', //mocked
-    },
-    validationRules,
-  }),
+  data() {
+    return {
+      isValid: true,
+      user: {
+        nickname: '',
+        email: 'letsgo763@gmail.com', //mocked
+        password: 'somePass32', //mocked
+      },
+      validationRules,
+    };
+  },
   computed: {
     isRegistrationPage(): boolean {
       return !!(this.$route.name === 'registration');
