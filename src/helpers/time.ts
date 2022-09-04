@@ -61,9 +61,9 @@ export const generateTimerObject = (date: string) => {
 };
 
 export const calculatePercentOfСhallenge = (challenge: UserChallenge) => {
-  const daysNumberInMiliseconds = challenge.days_number * oneDayInMiliseconds;
+  const daysNumberInMiliseconds = challenge.daysNumber * oneDayInMiliseconds;
   return (
     100 *
-    (countMsFromDateTillNow(challenge.start_date) / daysNumberInMiliseconds)
+    (countMsFromDateTillNow(challenge.startDate) / daysNumberInMiliseconds)
   );
 };

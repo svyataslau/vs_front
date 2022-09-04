@@ -80,7 +80,7 @@ export default defineComponent({
   },
   methods: {
     calculatePercent(): void {
-      this.progresProcent = calculatePercentOfСhallenge(this.challenge);
+      this.progressPercent = calculatePercentOfСhallenge(this.challenge);
     },
 
     runInterval(): void {
@@ -93,7 +93,7 @@ export default defineComponent({
     },
 
     generateTimerObject(): void {
-      const timer = generateTimerObject(this.challenge.start_date);
+      const timer = generateTimerObject(this.challenge.startDate);
       if (timer) {
         this.progressMessage = timer.progressMessage;
         this.repeatIntervalIn = timer.repeatIntervalIn;

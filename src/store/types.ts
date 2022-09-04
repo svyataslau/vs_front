@@ -12,10 +12,10 @@ export interface RootState {
 
 export interface UserChallenge {
   id: number;
-  user_id: number;
-  promise_id: number;
-  start_date: string;
-  days_number: number;
+  userId: number;
+  promiseId: number;
+  startDate: string;
+  daysNumber: number;
   title: string;
   description: string;
 }

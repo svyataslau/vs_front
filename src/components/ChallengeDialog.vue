@@ -101,7 +101,7 @@ export default defineComponent({
       promise: { id: 0, title: '' } as Promise,
       isDialogVisible: false,
       description: this.challenge.description || null,
-      daysNumber: this.challenge.days_number || null,
+      daysNumber: this.challenge.daysNumber || null,
       validationRules,
     };
   },
@@ -125,7 +125,7 @@ export default defineComponent({
   watch: {
     promises() {
       this.promise = [...this.promises].find(
-        (promise) => promise.id === this.challenge?.promise_id
+        (promise) => promise.id === this.challenge?.promiseId
       );
     },
   },
@@ -158,23 +158,23 @@ export default defineComponent({
     },
     submitChallenge() {
       const generalFields = {
-        promise_id: this.promise.id,
+        promiseId: this.promise.id,
         title: this.promise.title,
         description: this.description,
-        days_number: this.daysNumber,
+        daysNumber: this.daysNumber,
       };
 
       if (this.actionType === 'edit') {
         this.updateUserChallenge({
           ...this.challenge,
           ...generalFields,
-          start_date: adaptDateToServer(this.challenge.start_date),
+          startDate: adaptDateToServer(this.challenge.startDate),
         });
       } else if (this.actionType === 'create') {
         this.createUserChallenge({
-          start_date: convertMsToIsoString(Date.now()),
+          startDate: convertMsToIsoString(Date.now()),
           ...generalFields,
-          user_id: this.userData.id,
+          userId: this.userData.id,
         });
       }
 
