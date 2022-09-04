@@ -4,17 +4,44 @@
     <v-row class="mt-2" no-gutters>
       <v-col cols="12" sm="10" md="8" lg="6" class="mx-auto">
         <v-row align="center" class="px-4 px-md-11 mx-0 my-4" no-gutters>
-          <v-col cols="12" md="6" class="text-center text-md-left my-4"
-            ><h4 class="text-h4">My Challenges</h4></v-col
+          <v-col
+            v-if="isChallengesEmpty"
+            cols="12"
+            md="6"
+            class="text-center text-md-left my-4"
           >
-          <v-col cols="12" md="6" class="text-center text-md-end">
+            <h4 class="text-h4">My Challenges</h4>
+          </v-col>
+          <v-col v-else cols="12" class="text-center">
+            <h4 class="text-h5 ma-4 font-weight-light">
+              Nice to see you, {{ userNickname }}.
+            </h4>
+            <h4 class="text-h6 ma-4 font-weight-light">
+              You don't have any challenges yet. Just click on the plus button!
+            </h4>
+            <h4 v-if="isAdmin" class="text-h6 ma-4 font-weight-light">
+              To edit promises, click on the notepad button!
+            </h4>
+          </v-col>
+
+          <v-col
+            cols="12"
+            :md="isChallengesEmpty ? 6 : 12"
+            class="text-center"
+            :class="{ 'text-md-end': isChallengesEmpty }"
+          >
             <ChallengeDialog isLarge color="primary" :actionType="'create'">
               <v-icon>mdi-plus-thick</v-icon>
             </ChallengeDialog>
             <PromiseListDialog v-if="isAdmin" class="ma-4" />
           </v-col>
         </v-row>
-        <v-sheet class="ma-0 px-4 transparent" height="550">
+
+        <v-sheet
+          v-if="isChallengesEmpty"
+          class="ma-0 px-4 transparent"
+          height="550"
+        >
           <Challenge
             v-for="challenge in pageChallengeList"
             :key="challenge.id"
@@ -63,6 +90,12 @@ export default defineComponent({
     pages(): number {
       if (this.pageSize == null || this.challenges.length == null) return 0;
       return Math.ceil(this.challenges.length / this.pageSize);
+    },
+    userNickname(): string {
+      return this.userData.nickname;
+    },
+    isChallengesEmpty(): boolean {
+      return !!this.challenges.length;
     },
   },
   watch: {
