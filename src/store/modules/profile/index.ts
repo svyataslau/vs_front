@@ -1,34 +1,27 @@
-import axios from 'axios';
 import router from '@/router';
 import { ActionTree, GetterTree, Module, MutationTree } from 'vuex';
+import { ProfileState, RootState } from '@/store/types';
+import { apiUrl } from '@/store/api';
 
-const apiUrl = axios.create({
-  baseURL: process.env.VUE_APP_API_DEFAULT_URL,
-});
-
-export interface ProfileState {
-  isAuthorized: boolean;
-  userData: object;
-}
-
-export const getters: GetterTree<ProfileState, any> = {
+export const getters: GetterTree<ProfileState, RootState> = {
   IS_AUTHORIZED: (state) => state.isAuthorized,
   USER_DATA: (state) => state.userData,
+  IS_ADMIN: (state) => state.isAdmin,
 };
 
 export const mutations: MutationTree<ProfileState> = {
-  SET_IS_AUTHORIZED(state, payload: boolean) {
+  SET_IS_AUTHORIZED(state, payload) {
     state.isAuthorized = payload;
   },
-  SET_USER_DATA(state, payload: object) {
+  SET_USER_DATA(state, payload) {
     state.userData = payload;
   },
 };
 
-export const actions: ActionTree<ProfileState, any> = {
-  REGISTER({ commit, dispatch }, payload) {
+export const actions: ActionTree<ProfileState, RootState> = {
+  REGISTER({ commit, dispatch }, { nickname, email, password }) {
     apiUrl
-      .post('/users', payload)
+      .post('/users', { nickname, email, password })
       .then((res) => {
         if (res.status === 201) {
           commit('SET_IS_AUTHORIZED', true);
@@ -46,9 +39,12 @@ export const actions: ActionTree<ProfileState, any> = {
         );
       });
   },
-  LOGIN({ commit, dispatch }, payload) {
+  LOGIN({ commit, dispatch }, { email, password }) {
     apiUrl
-      .post('/users/login', payload)
+      .post('/users/login', {
+        email,
+        password,
+      })
       .then((res) => {
         if (res.status === 200) {
           commit('SET_IS_AUTHORIZED', true);
@@ -70,6 +66,7 @@ export const actions: ActionTree<ProfileState, any> = {
     try {
       commit('SET_IS_AUTHORIZED', false);
       commit('SET_USER_DATA', {});
+      router.push('login');
     } catch (e) {
       dispatch(
         'CREATE_ALERT',
@@ -80,12 +77,32 @@ export const actions: ActionTree<ProfileState, any> = {
       );
     }
   },
+  REFRESH_USER_DATA({ commit, getters, dispatch }) {
+    const userId = getters.USER_DATA?.id;
+    apiUrl
+      .get(`/users/${userId}`)
+      .then((res) => {
+        if (res.status === 200) {
+          commit('SET_USER_DATA', res.data.data);
+        }
+      })
+      .catch((e) => {
+        dispatch(
+          'CREATE_ALERT',
+          { message: e.response.data.message },
+          {
+            root: true,
+          }
+        );
+      });
+  },
 };
 
-export const profile: Module<ProfileState, any> = {
+export const profile: Module<ProfileState, RootState> = {
   state: {
     isAuthorized: false,
     userData: {},
+    isAdmin: true,
   },
   getters,
   mutations,

@@ -1,43 +1,43 @@
 <template>
   <v-container fluid>
     <h1 class="text-h4">{{ title }}</h1>
-    <v-form ref="form" v-model="valid">
+    <v-form ref="form" v-model="isValid">
       <v-text-field
         v-if="isRegistrationPage"
+        required
         color="black"
+        label="Nickname"
         v-model="user.nickname"
         :rules="validationRules.nicknameRules"
-        label="Nickname"
-        required
       ></v-text-field>
 
       <v-text-field
+        required
+        label="Email"
         color="black"
         v-model="user.email"
         :rules="validationRules.emailRules"
-        label="Email"
-        required
       ></v-text-field>
 
       <v-text-field
+        required
+        label="Password"
         color="black"
         v-model="user.password"
         :rules="validationRules.passwordRules"
-        label="Password"
-        required
       ></v-text-field>
 
       <v-btn
-        :disabled="!valid"
-        color="blue lighten-1"
+        color="primary"
         class="mr-4 white--text"
+        :disabled="!isValid"
         @click="submit"
       >
         Submit
       </v-btn>
 
       <v-btn
-        color="pink lighten-1"
+        color="warning"
         class="mr-4 white--text"
         @click="$refs.form.reset()"
       >
@@ -50,21 +50,24 @@
 <script lang="ts">
 import Vue from 'vue';
 import validationRules from '@/helpers/validationRules';
+import { User } from '@/store/types';
 
 export default Vue.extend({
   name: 'FormContent',
   props: {
     title: String,
   },
-  data: () => ({
-    valid: true,
-    user: {
-      nickname: '',
-      email: 'letsgo763@gmail.com', //mocked
-      password: 'somePass32', //mocked
-    },
-    validationRules,
-  }),
+  data() {
+    return {
+      isValid: true,
+      user: {
+        nickname: '',
+        email: 'letsgo763@gmail.com',
+        password: 'somePass32',
+      } as User,
+      validationRules,
+    };
+  },
   computed: {
     isRegistrationPage(): boolean {
       return !!(this.$route.name === 'registration');
@@ -73,17 +76,10 @@ export default Vue.extend({
   methods: {
     submit() {
       if (this.$route.name === 'login') {
-        this.$store.dispatch('LOGIN', {
-          email: this.user.email,
-          password: this.user.password,
-        });
+        this.$store.dispatch('LOGIN', this.user);
       }
       if (this.$route.name === 'registration') {
-        this.$store.dispatch('REGISTER', {
-          nickname: this.user.nickname,
-          email: this.user.email,
-          password: this.user.password,
-        });
+        this.$store.dispatch('REGISTER', this.user);
       }
     },
   },

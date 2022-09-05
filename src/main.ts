@@ -9,6 +9,12 @@ axios.defaults.baseURL = 'http://localhost:8090/api';
 
 Vue.config.productionTip = false;
 
+Vue.directive('blur', {
+  inserted: function (el) {
+    el.onfocus = (ev: Event) => (ev.target as HTMLInputElement).blur();
+  },
+});
+
 const vm = new Vue({
   router,
   store,

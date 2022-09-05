@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-main class="grey lighten-5">
+    <v-main class="textSecondaryColor">
       <router-view />
     </v-main>
     <CustomAlert
@@ -13,11 +13,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { mapGetters } from 'vuex';
 import CustomAlert from '@/components/CustomAlert.vue';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'App',
   components: {
     CustomAlert,
