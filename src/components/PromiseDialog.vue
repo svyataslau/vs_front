@@ -27,7 +27,7 @@
             label="Title"
             placeholder="Provide a title"
             v-model="title"
-            :rules="validationRules.title"
+            :rules="validationRules.titleRules"
           ></v-text-field>
         </v-card-text>
         <v-divider></v-divider>

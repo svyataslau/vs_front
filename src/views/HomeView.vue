@@ -71,7 +71,7 @@ import { mapGetters } from 'vuex';
 import { UserChallenge } from '@/store/types';
 
 export default Vue.extend({
-  name: 'App',
+  name: 'HomeView',
   components: { PromiseListDialog, HeaderBar, Challenge, ChallengeDialog },
   data: () => {
     return {
@@ -88,7 +88,6 @@ export default Vue.extend({
       isAdmin: 'IS_ADMIN',
     }),
     pages(): number {
-      if (this.pageSize == null || this.challenges.length == null) return 0;
       return Math.ceil(this.challenges.length / this.pageSize);
     },
     userNickname(): string {

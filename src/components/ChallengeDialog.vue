@@ -38,7 +38,7 @@
             label="Description"
             placeholder="Provide a reason or description for your challenge"
             v-model="description"
-            :rules="validationRules.description"
+            :rules="validationRules.descriptionRules"
           ></v-textarea>
           <v-text-field
             outlined
