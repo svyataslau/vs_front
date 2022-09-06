@@ -44,7 +44,7 @@
           />
         </v-sheet>
         <v-pagination
-          v-if="userChallenges.length > pageSize"
+          v-if="challenges.length > pageSize"
           v-model="page"
           circle
           class="mb-2"
@@ -75,6 +75,7 @@ export default Vue.extend({
       pageChallengeList: [] as UserChallenge[],
       isOverlayVisible: false,
       isChallengesEmpty: true,
+      challenges: [] as UserChallenge[],
     };
   },
   computed: {
@@ -84,18 +85,20 @@ export default Vue.extend({
       userChallenges: 'USER_CHALLENGES',
     }),
     pages(): number {
-      return Math.ceil(this.userChallenges.length / this.pageSize);
+      return Math.ceil(this.challenges.length / this.pageSize);
     },
     userNickname(): string {
       return this.userData.nickname;
     },
   },
   watch: {
-    userChallenges() {
+    userChallenges(newVal) {
+      this.challenges = [...newVal].reverse();
       this.updateView();
     },
   },
   created() {
+    this.challenges = [...this.userChallenges].reverse();
     this.updateView();
   },
   methods: {
@@ -106,23 +109,23 @@ export default Vue.extend({
         --this.page;
         this.updatePage(this.page);
       }
-      if (this.userChallenges.length === 0) {
+      if (this.challenges.length === 0) {
         this.isChallengesEmpty = true;
       } else {
         this.isChallengesEmpty = false;
       }
     },
     initPage() {
-      if (this.userChallenges.length < this.pageSize) {
-        this.pageChallengeList = this.userChallenges;
+      if (this.challenges.length < this.pageSize) {
+        this.pageChallengeList = this.challenges;
       } else {
-        this.pageChallengeList = this.userChallenges.slice(0, this.pageSize);
+        this.pageChallengeList = this.challenges.slice(0, this.pageSize);
       }
     },
     updatePage(pageIndex: number) {
       const start = (pageIndex - 1) * this.pageSize;
       const end = pageIndex * this.pageSize;
-      this.pageChallengeList = this.userChallenges.slice(start, end);
+      this.pageChallengeList = this.challenges.slice(start, end);
       this.page = pageIndex;
     },
   },
