@@ -5,14 +5,6 @@ const oneHourInMiliseconds = 3600000;
 const oneMinuteInMiliseconds = 60000;
 const oneSecondInMiliseconds = 1000;
 
-const convertToLocal = (date: string) => {
-  let startTime = new Date(date);
-  startTime = new Date(
-    startTime.getTime() + startTime.getTimezoneOffset() * 60000
-  );
-  return startTime.toString();
-};
-
 export const dateNowIsoString = () => {
   return new Date(
     Date.now() + new Date().getTimezoneOffset() * 60000
