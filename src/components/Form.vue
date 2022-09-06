@@ -62,8 +62,8 @@ export default Vue.extend({
       isValid: true,
       user: {
         nickname: '',
-        email: 'letsgo763@gmail.com',
-        password: 'somePass32',
+        email: '',
+        password: '',
       } as User,
       validationRules,
     };
