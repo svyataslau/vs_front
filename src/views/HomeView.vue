@@ -6,7 +6,7 @@
         <v-row align="center" class="px-4 px-md-11 mx-0 my-4" no-gutters>
           <v-col v-if="isChallengesEmpty" cols="12" class="text-center">
             <h4 class="text-h5 ma-4 font-weight-light">
-              Nice to see you, {{ userNickname }}.
+              Nice to see you, {{ userNickname }}!
             </h4>
             <h4 class="text-h6 ma-4 font-weight-light">
               You don't have any challenges yet. Just click on the plus button!
