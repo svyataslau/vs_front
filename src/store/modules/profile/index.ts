@@ -49,6 +49,7 @@ export const actions: ActionTree<ProfileState, RootState> = {
         if (res.status === 200) {
           commit('SET_IS_AUTHORIZED', true);
           commit('SET_USER_DATA', res.data.data);
+          commit('SET_USER_CHALLENGES', res.data.data?.challenges);
           router.push('/');
         }
       })
@@ -84,6 +85,7 @@ export const actions: ActionTree<ProfileState, RootState> = {
       .then((res) => {
         if (res.status === 200) {
           commit('SET_USER_DATA', res.data.data);
+          commit('SET_USER_CHALLENGES', res.data.data?.challenges);
         }
       })
       .catch((e) => {
