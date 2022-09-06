@@ -5,7 +5,7 @@ const oneHourInMiliseconds = 3600000;
 const oneMinuteInMiliseconds = 60000;
 const oneSecondInMiliseconds = 1000;
 
-export const convertIsoToMsString = (date: string) => {
+const convertToLocal = (date: string) => {
   let startTime = new Date(date);
   startTime = new Date(
     startTime.getTime() + startTime.getTimezoneOffset() * 60000
@@ -13,16 +13,20 @@ export const convertIsoToMsString = (date: string) => {
   return startTime.toString();
 };
 
-export const convertMsToIsoString = (date: number) => {
-  return new Date(date).toISOString();
+export const dateNowIsoString = () => {
+  return new Date(
+    Date.now() + new Date().getTimezoneOffset() * 60000
+  ).toISOString();
 };
 
-export const adaptDateToServer = (date: string) => {
-  return convertMsToIsoString(Date.parse(convertIsoToMsString(date)));
-};
-
-export const countMsFromDateTillNow = (date: string) => {
-  return Date.now() - Date.parse(convertIsoToMsString(date));
+export const countMsFromDateTillNow = (isoDateString: string) => {
+  return (
+    Date.parse(
+      new Date(
+        Date.now() + new Date().getTimezoneOffset() * 60000
+      ).toISOString()
+    ) - Date.parse(isoDateString)
+  );
 };
 
 export const generateTimerObject = (date: string) => {

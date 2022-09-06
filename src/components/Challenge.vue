@@ -10,6 +10,7 @@
     </v-col>
     <v-col cols="4" md="3" lg="2" class="d-flex justify-center align-center">
       <v-progress-circular
+        v-if="progressMessage.length"
         :rotate="-90"
         :size="100"
         :width="10"
@@ -73,7 +74,6 @@ export default defineComponent({
     },
   },
   created() {
-    this.generateTimerObject();
     this.runInterval();
   },
   beforeDestroy() {
@@ -83,7 +83,6 @@ export default defineComponent({
     calculatePercent(): void {
       this.progressPercent = calculatePercentOfСhallenge(this.challenge);
     },
-
     runInterval(): void {
       this.intervalId = setInterval(() => {
         this.generateTimerObject();
@@ -92,16 +91,19 @@ export default defineComponent({
         }
       }, this.repeatIntervalIn);
     },
-
     generateTimerObject(): void {
       const timer = generateTimerObject(this.challenge.startDate);
       if (timer) {
         this.progressMessage = timer.progressMessage;
         this.repeatIntervalIn = timer.repeatIntervalIn;
         this.calculatePercent();
+      } else {
+        this.$store.dispatch('CREATE_ALERT', {
+          message: "We can't calculate the time interval of your challenge",
+        });
+        clearInterval(this.intervalId);
       }
     },
-
     deleteChallenge(): void {
       this.$store.dispatch('DELETE_USER_CHALLENGE', this.challenge);
     },
