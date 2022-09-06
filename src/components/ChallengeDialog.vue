@@ -71,7 +71,7 @@ import type { PropType } from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import validationRules from '@/helpers/validationRules';
 import { UserChallenge, Promise } from '@/store/types';
-import { adaptDateToServer, convertMsToIsoString } from '@/helpers/time';
+import { dateNowIsoString } from '@/helpers/time';
 
 export default defineComponent({
   name: 'ChallengeDialog',
@@ -164,21 +164,19 @@ export default defineComponent({
         description: this.description,
         daysNumber: this.daysNumber,
       };
-
       if (this.actionType === 'edit') {
         this.updateUserChallenge({
           ...this.challenge,
           ...generalFields,
-          startDate: adaptDateToServer(this.challenge.startDate),
+          startDate: this.challenge.startDate,
         });
       } else if (this.actionType === 'create') {
         this.createUserChallenge({
-          startDate: convertMsToIsoString(Date.now()),
+          startDate: dateNowIsoString(),
           ...generalFields,
           userId: this.userData.id,
         });
       }
-
       this.hideDialog();
     },
   },

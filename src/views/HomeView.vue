@@ -4,15 +4,7 @@
     <v-row class="mt-2" no-gutters>
       <v-col cols="12" sm="10" md="8" lg="6" class="mx-auto">
         <v-row align="center" class="px-4 px-md-11 mx-0 my-4" no-gutters>
-          <v-col
-            v-if="isChallengesEmpty"
-            cols="12"
-            md="6"
-            class="text-center text-md-left my-4"
-          >
-            <h4 class="text-h4">My Challenges</h4>
-          </v-col>
-          <v-col v-else cols="12" class="text-center">
+          <v-col v-if="isChallengesEmpty" cols="12" class="text-center">
             <h4 class="text-h5 ma-4 font-weight-light">
               Nice to see you, {{ userNickname }}.
             </h4>
@@ -23,22 +15,30 @@
               To edit promises, click on the notepad button!
             </h4>
           </v-col>
+          <v-col v-else cols="12" md="6" class="text-center text-md-left my-4">
+            <h4 class="text-h4">My Challenges</h4>
+          </v-col>
 
           <v-col
             cols="12"
-            :md="isChallengesEmpty ? 6 : 12"
+            :md="isChallengesEmpty ? 12 : 6"
             class="text-center"
-            :class="{ 'text-md-end': isChallengesEmpty }"
+            :class="{ 'text-md-end': !isChallengesEmpty }"
           >
-            <ChallengeDialog isLarge color="primary" :actionType="'create'">
+            <ChallengeDialog
+              isLarge
+              v-cloak
+              color="primary"
+              :actionType="'create'"
+            >
               <v-icon>mdi-plus-thick</v-icon>
             </ChallengeDialog>
-            <PromiseListDialog v-if="isAdmin" class="ma-4" />
+            <PromiseListDialog v-cloak v-if="isAdmin" class="ma-4" />
           </v-col>
         </v-row>
 
         <v-sheet
-          v-if="isChallengesEmpty"
+          v-if="!isChallengesEmpty"
           class="ma-0 px-4 transparent"
           height="550"
         >
@@ -79,6 +79,7 @@ export default Vue.extend({
       pageSize: 3,
       pageChallengeList: [] as UserChallenge[],
       isOverlayVisible: false,
+      isChallengesEmpty: true,
       challenges: [] as UserChallenge[],
     };
   },
@@ -86,6 +87,7 @@ export default Vue.extend({
     ...mapGetters({
       userData: 'USER_DATA',
       isAdmin: 'IS_ADMIN',
+      userChallenges: 'USER_CHALLENGES',
     }),
     pages(): number {
       return Math.ceil(this.challenges.length / this.pageSize);
@@ -93,29 +95,31 @@ export default Vue.extend({
     userNickname(): string {
       return this.userData.nickname;
     },
-    isChallengesEmpty(): boolean {
-      return !!this.challenges.length;
-    },
   },
   watch: {
-    userData: {
-      handler(newUserData) {
-        if (newUserData.challenges?.length) {
-          this.challenges = [...newUserData.challenges].reverse();
-          this.initPage();
-          this.updatePage(this.page);
-        }
-      },
-      immediate: true,
+    userChallenges(newVal) {
+      this.challenges = [...newVal].reverse();
+      this.updateView();
     },
-    pageChallengeList(newList) {
-      if (newList.length == 0) {
+  },
+  created() {
+    this.challenges = [...this.userChallenges].reverse();
+    this.updateView();
+  },
+  methods: {
+    updateView() {
+      this.updatePage(this.page);
+      this.initPage();
+      if (this.pageChallengeList.length === 0) {
         --this.page;
         this.updatePage(this.page);
       }
+      if (this.challenges.length === 0) {
+        this.isChallengesEmpty = true;
+      } else {
+        this.isChallengesEmpty = false;
+      }
     },
-  },
-  methods: {
     initPage() {
       if (this.challenges.length < this.pageSize) {
         this.pageChallengeList = this.challenges;
