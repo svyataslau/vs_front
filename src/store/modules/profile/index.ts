@@ -48,7 +48,6 @@ export const actions: ActionTree<ProfileState, RootState> = {
       .then((res) => {
         if (res.status === 200) {
           commit('SET_IS_AUTHORIZED', true);
-          console.log(res);
           commit('SET_USER_DATA', res.data);
           commit('SET_USER_CHALLENGES', res.data?.challenges);
           router.push('/');

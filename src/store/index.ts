@@ -157,7 +157,7 @@ export const actions: ActionTree<RootState, RootState> = {
       .get('/promises')
       .then((res) => {
         if (res.status === 200) {
-          commit('SET_PROMISES', res.data.data);
+          commit('SET_PROMISES', res.data);
         }
       })
       .catch((e) => {
