@@ -23,9 +23,9 @@ export const actions: ActionTree<ProfileState, RootState> = {
     apiUrl
       .post('/users', { nickname, email, password })
       .then((res) => {
-        if (res.status === 201) {
+        if (res.status === 200) {
           commit('SET_IS_AUTHORIZED', true);
-          commit('SET_USER_DATA', res.data.data);
+          commit('SET_USER_DATA', res.data);
           router.push('/');
         }
       })
@@ -48,8 +48,8 @@ export const actions: ActionTree<ProfileState, RootState> = {
       .then((res) => {
         if (res.status === 200) {
           commit('SET_IS_AUTHORIZED', true);
-          commit('SET_USER_DATA', res.data.data);
-          commit('SET_USER_CHALLENGES', res.data.data?.challenges);
+          commit('SET_USER_DATA', res.data);
+          commit('SET_USER_CHALLENGES', res.data?.challenges);
           router.push('/');
         }
       })
@@ -84,8 +84,8 @@ export const actions: ActionTree<ProfileState, RootState> = {
       .get(`/users/${userId}`)
       .then((res) => {
         if (res.status === 200) {
-          commit('SET_USER_DATA', res.data.data);
-          commit('SET_USER_CHALLENGES', res.data.data?.challenges);
+          commit('SET_USER_DATA', res.data);
+          commit('SET_USER_CHALLENGES', res.data?.challenges);
         }
       })
       .catch((e) => {
